@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     "corsheaders",
+
     "users",
     "reservations",
+    "restaurant",
 ]
 
 MIDDLEWARE = [
@@ -126,6 +129,12 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_DIRS = (
+    BASE_DIR / 'static',
+    BASE_DIR / 'restaurant' / 'static',
+    BASE_DIR / 'users' / 'static',
+)
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
