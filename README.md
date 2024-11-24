@@ -1,6 +1,6 @@
 DF2
 
-![plot](./static/img/index.webp)
+![plot](./static/img/index.png)
 
 Сайт для бронирования столиков в ресторане
 
