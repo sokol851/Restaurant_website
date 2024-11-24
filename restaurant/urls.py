@@ -6,5 +6,5 @@ from restaurant.views import Index
 app_name = RestaurantConfig.name
 
 urlpatterns = [
-    path('', Index.as_view(), name='index'),
+    path("", Index.as_view(), name="index"),
 ]
