@@ -104,7 +104,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         if user.phone is None:
             user.phone = 'Не указано'
         if user.avatar == '':
-            user.avatar = 'users/non_avatar.png'
+            user.avatar = 'non_avatar.png'
         user.save()
         return super().form_valid(form)
 

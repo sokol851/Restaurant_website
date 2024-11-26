@@ -1,0 +1,87 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="col-12 mt-3 mb-4 container-fluid card rounded-5"
+     style="background-image: url('{% static 'img/block.png' %}'); background-size: cover;">
+
+    <div class="row">
+
+        <div class="col-12 mt-3 text-white bg-black opacity-75 rounded-5 border-3">
+            <h3 class="card-title text-center">
+                {{ title }}
+            </h3>
+        </div>
+
+
+        <div class="col-4 mt-3 mb-5 text-white rounded-5">
+
+            <div class="col-12 bg-warning text-black rounded-5 opacity-75 text-center">
+                <p class="fs-3"><strong>Наша команда</strong></p>
+            </div>
+
+            <div class="col-12">
+                {% for object in staff %}
+                <table class="col-12">
+                    <tr>
+                        <td class="col-6 text-center">
+                            <img width="150" height="150" src={{object.photo.url}}>
+                        </td>
+                        <td class="col-6 bg-black rounded-5 opacity-75 text-center">
+                            <p>{{object.first_name}} {{object.last_name}}</p>
+                            <p>Должность: {{object.position}}</p>
+                            <p>В команде:
+                                {{ object.experience.years }} {{ object.naming_year }}
+                                {{ object.experience.months }} {{ object.naming_month }}
+                                {{ object.experience.days }} {{ object.naming_day }}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-4 mt-3 text-white">
+            <div class="col-12 bg-warning text-center text-black rounded-5 opacity-75">
+                <p class="fs-3"><strong>Наша история</strong></p>
+            </div>
+            <div class="col-12 bg-black rounded-5 opacity-75">
+                <div class="row mb-5">
+                    {% for object in history %}
+                    <div class="col-4 text-end">
+                        <p><span class="fs-2"><strong>{{ object.year }} - </strong></span></p>
+                    </div>
+                    <div class="col-8 my-3">
+                        <p><span class="fs-6">{{ object.activity }}</span></p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4 mt-3 text-white">
+            <div class="col-12 bg-warning text-black rounded-5 opacity-75 text-center">
+                <p class="fs-3"><strong>Наша миссия</strong></p>
+            </div>
+            <div class="col-12 bg-black rounded-5 opacity-75">
+                <div class="row mb-3">
+                    {% for object in missions %}
+                    <div class="col-4 text-end">
+                        <p><span class="fs-2"><strong>{{ object.mission }} - </strong></span></p>
+                    </div>
+                    <div class="col-8 my-3">
+                        <p><span class="fs-6">{{ object.description }}</span></p>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

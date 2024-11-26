@@ -6,6 +6,10 @@ from django.db import models
 NULLABLE = {"blank": True, "null": True}
 
 
+def upload_for_users(self, filename):
+    return 'users/%s/%s' % (self.email, filename)
+
+
 class User(AbstractUser):
     username = None
 
@@ -36,8 +40,8 @@ class User(AbstractUser):
     )
 
     avatar = models.ImageField(
-        upload_to="users/%Y",
-        default="users/non_avatar.png",
+        upload_to=upload_for_users,
+        default="non_avatar.png",
         verbose_name="Аватар",
         **NULLABLE
     )
