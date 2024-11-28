@@ -1,0 +1,28 @@
+<form method="POST" id="contactForm" name="contactForm" class="contactForm">
+
+    {% csrf_token %}
+
+    <div class="mb-3 ">
+        <label for="email" class="form-label">Email адрес:</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
+    </div>
+
+    <div class="mb-3 ">
+        <label for="phone" class="form-label">Номер телефона:</label>
+        <input type="text" class="form-control" name="phone" id="phone" placeholder="+7 (987) 654-32-10">
+    </div>
+
+    <div class="mb-3 ">
+        <label for="message" class="form-label">Ваше сообщение:</label>
+        <textarea class="form-control" name="message" id="message" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-warning form-control mb-3">Отправить</button>
+</form>
+
+{% if messages %}
+<div class="alert alert-success">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}

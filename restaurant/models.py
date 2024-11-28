@@ -15,12 +15,31 @@ class StaffRestaurant(models.Model):
     MONTHS = ['месяца', 'месяцев', 'месяц']
     YEARS = ['года', 'лет', 'год']
 
-    first_name = models.CharField(max_length=75, verbose_name='Имя')
-    last_name = models.CharField(max_length=75, verbose_name='Фамилия')
-    photo = models.ImageField(upload_to=upload, default="non_avatar.png", **NULLABLE, verbose_name='Фото')
-    position = models.CharField(max_length=50, verbose_name='Должность')
-    date_employment = models.DateField(verbose_name="Дата трудоустройства", **NULLABLE)
-    is_published = models.BooleanField(default=True, verbose_name='Публикация')
+    first_name = models.CharField(
+        max_length=75,
+        verbose_name='Имя'
+    )
+    last_name = models.CharField(
+        max_length=75,
+        verbose_name='Фамилия'
+    )
+    photo = models.ImageField(
+        upload_to=upload,
+        default="non_avatar.png",
+        **NULLABLE,
+        verbose_name='Фото'
+    )
+    position = models.CharField(
+        max_length=50,
+        verbose_name='Должность'
+    )
+    date_employment = models.DateField(
+        verbose_name="Дата трудоустройства",
+        **NULLABLE)
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Публикация'
+    )
 
     @property
     def experience(self):
@@ -56,7 +75,7 @@ class StaffRestaurant(models.Model):
         if self.experience.years % 10 in [2, 3, 4]:
             name_year = self.YEARS[0]
         if (self.experience.years % 10 in [0, 5, 6, 7, 8, 9]
-                or self.experience.years % 100 in [11,12,13,14]):
+                or self.experience.years % 100 in [11, 12, 13, 14]):
             name_year = self.YEARS[1]
         return name_year
 
@@ -69,9 +88,17 @@ class StaffRestaurant(models.Model):
 
 
 class MissionsRestaurant(models.Model):
-    mission = models.CharField(max_length=50, verbose_name='Миссия')
-    description = models.TextField(verbose_name='Описание')
-    serial_number = models.SmallIntegerField(verbose_name='Порядковый номер', **NULLABLE)
+    mission = models.CharField(
+        max_length=50,
+        verbose_name='Миссия'
+    )
+    description = models.TextField(
+        verbose_name='Описание'
+    )
+    serial_number = models.SmallIntegerField(
+        verbose_name='Порядковый номер',
+        **NULLABLE
+    )
 
     class Meta:
         verbose_name = 'Миссия'
@@ -82,8 +109,12 @@ class MissionsRestaurant(models.Model):
 
 
 class HistoryRestaurant(models.Model):
-    year = models.SmallIntegerField(verbose_name='Год')
-    activity = models.TextField(verbose_name='Событие')
+    year = models.SmallIntegerField(
+        verbose_name='Год'
+    )
+    activity = models.TextField(
+        verbose_name='Событие'
+    )
 
     class Meta:
         verbose_name = 'История'
@@ -91,3 +122,74 @@ class HistoryRestaurant(models.Model):
 
     def __str__(self):
         return self.activity
+
+
+class Description(models.Model):
+    description = models.TextField(
+        verbose_name='Описание ресторана'
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Признак публикации'
+    )
+
+    class Meta:
+        verbose_name = 'Описание ресторана'
+        verbose_name_plural = 'Описания ресторана'
+
+    def __str__(self):
+        return self.description
+
+
+class Services(models.Model):
+    service = models.CharField(
+        max_length=100,
+        verbose_name='Услуга ресторана'
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Признак публикации'
+    )
+
+    class Meta:
+        verbose_name = 'Услуга'
+        verbose_name_plural = 'Услуги'
+
+    def __str__(self):
+        return self.service
+
+
+class Contacts(models.Model):
+    city = models.CharField(
+        max_length=50,
+        verbose_name='Город'
+    )
+    street = models.CharField(
+        max_length=50,
+        verbose_name='Улица'
+    )
+    house_number = models.CharField(
+        max_length=10,
+        verbose_name='Номер дома'
+    )
+    extra = models.CharField(
+        max_length=100,
+        verbose_name='Дополнительная информация',
+        **NULLABLE
+    )
+    phone = models.CharField(
+        max_length=15,
+        verbose_name='Номер телефона',
+        **NULLABLE
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Признак публикации'
+    )
+
+    class Meta:
+        verbose_name = 'Контакт'
+        verbose_name_plural = 'Контакты'
+
+    def __str__(self):
+        return f"{self.city} ({self.street}) - {self.phone}"
