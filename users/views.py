@@ -12,6 +12,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, FormView,
                                   TemplateView, UpdateView)
 
 from config import settings
+from restaurant.models import Services
 from users.forms import (CustomLoginForm, UserPasswordResetForm,
                          UserProfileForm, UserRegisterForm)
 from users.models import User
@@ -81,6 +82,11 @@ class EmailConfirmationSentView(TemplateView):
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = User
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['reservations'] = Services.objects.all()
+        return context
 
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):

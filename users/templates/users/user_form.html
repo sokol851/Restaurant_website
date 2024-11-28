@@ -15,9 +15,11 @@
         <div class="card-body mb-3 mt-3 text-white bg-black opacity-75 rounded-5">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-warning form-control">
+            <button type="submit" class="btn btn-success form-control">
                 Сохранить
             </button>
+            <a href="{% url 'users:user_detail' pk=user.pk %}" type="button"
+                           class="btn btn-warning form-control">Вернуться</a>
         </div>
     </div>
 </form>

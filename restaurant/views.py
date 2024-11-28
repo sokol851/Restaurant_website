@@ -28,7 +28,7 @@ class Index(TemplateView, FormView):
         phone = form.cleaned_data['phone']
         message = form.cleaned_data['message']
 
-        subject = 'Сообщение из формы обратной связи'
+        subject = f'Обратная связь для "Ресторан домашней кухни"'
         body = (f"Email: {email}\n"
                 f"Телефон: {phone}\n"
                 f"Сообщение:\n{message}")
