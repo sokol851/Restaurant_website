@@ -128,8 +128,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = (
     BASE_DIR / "static",
-    BASE_DIR / "restaurant" / "static",
-    BASE_DIR / "users" / "static",
 )
 
 MEDIA_URL = "/media/"
@@ -149,8 +147,8 @@ EMAIL_HOST = config("EMAIL_HOST")
 EMAIL_PORT = config("EMAIL_PORT")
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-EMAIL_USE_SSL = config("EMAIL_USE_SSL")
-EMAIL_USE_TLS = config("EMAIL_USE_TLS")
+EMAIL_USE_SSL = config("EMAIL_USE_SSL") == "True"
+EMAIL_USE_TLS = config("EMAIL_USE_TLS") == "True"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 SERVER_EMAIL = EMAIL_HOST_USER

@@ -1,7 +1,7 @@
 {% extends 'restaurant/base.html' %}
 {% load static %}
 {% block content %}
-<form class="row mt-3 col-6 position-absolute top-50 start-50 translate-middle" method="post"
+<form class="row mt-3 col-6 position-fixed top-50 start-50 translate-middle" method="post"
       enctype="multipart/form-data">
 
     <div class="bg-image card rounded-5"
@@ -12,39 +12,48 @@
             </h3>
         </div>
 
-        <div class="card-body mb-3 mt-3 text-white text-center">
+        <div class="container mb-3 mt-3 text-white text-center">
             <div class="row">
                 <div class="col-6 text-center">
                     <img width="300" height="300" src={{object.avatar.url}}>
                 </div>
                 <div class="col-6 bg-black opacity-75 rounded-5">
-                <table>
-                    <tr>
-                        <th>Email:</th>
-                        <td>{{object.email}}</td>
-                    </tr>
-                    <tr>
-                        <th>Имя:</th>
-                        <td colspan="2">{{object.first_name}}</td>
-                    </tr>
-                    <tr>
-                        <th>Фамилия:</th>
-                        <td>{{object.last_name}}</td>
-                    </tr>
-                </table>
+                    <table class="table table-dark mt-3 table-bordered">
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{object.email}}</td>
+                        </tr>
+                        <tr>
+                            <th>Имя:</th>
+                            <td colspan="2">{{object.first_name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Фамилия:</th>
+                            <td>{{object.last_name}}</td>
+                        </tr>
+                    </table>
+                    <div class="row">
+                        <div class="col-12">
+                            {% include 'reservations/reservations_list.html'%}
+                        </div>
                     </div>
+                </div>
 
             </div>
 
             <div class="card-body">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-4">
                         <a href="{% url 'users:user_update' object.pk %}" type="button"
-                           class="btn btn-dark form-control">Редактировать</a>
+                           class="btn btn-dark form-control">Редактировать профиль</a>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
+                        <a href="{% url 'users:user_detail' pk=user.pk %}" type="button"
+                           class="btn btn-dark form-control">Управление текущими бронями</a>
+                    </div>
+                    <div class="col-4">
                         <a href="{% url 'users:user_delete' object.pk %}" type="button"
-                           class="btn btn-dark form-control">Удалить</a>
+                           class="btn btn-danger text-black form-control">Удалить аккаунт</a>
                     </div>
                 </div>
             </div>

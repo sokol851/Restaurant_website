@@ -6,6 +6,8 @@
 ### О ресторане:
 ![plot](./static/img/about_site.png)
 
+### Профиль пользователя:
+![plot](./static/img/profile.png)
 
 
 ____________________________

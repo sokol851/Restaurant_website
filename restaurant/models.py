@@ -10,6 +10,10 @@ def upload(self, filename):
     return 'staff/%s %s/%s' % (self.last_name, self.first_name, filename)
 
 
+def upload_for_bg(self, filename):
+    return 'bg/%s' % (filename, )
+
+
 class StaffRestaurant(models.Model):
     DAYS = ['дня', 'дней', 'день']
     MONTHS = ['месяца', 'месяцев', 'месяц']
@@ -126,7 +130,12 @@ class HistoryRestaurant(models.Model):
 
 class Description(models.Model):
     description = models.TextField(
-        verbose_name='Описание ресторана'
+        verbose_name='Описание ресторана',
+        **NULLABLE
+    )
+    background = models.ImageField(
+        upload_to=upload_for_bg,
+        verbose_name="Фон",
     )
     is_published = models.BooleanField(
         default=True,
