@@ -12,77 +12,57 @@
                         <div class="col-3">
                         </div>
                         <div class="col-6">
-                            <p>Теплый семейный ужин, долгожданная встреча с друзьями, веселый корпоратив в кругу коллег
-                                или
-                                шумное юбилейное гулянье – в нашем ресторане Вы сможете провести незабываемый праздник.
-                                Мы
-                                создадим подходящую атмосферу и позаботимся о том, чтобы Вам и Вашим гостям было уютно и
-                                весело
-                                у нас!</p>
+                            {% for object in description %}
+                            <p>{{ object }}</p>
+                            {% endfor %}
                         </div>
                         <div class="col-3">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row col-12 mt-3">
+            <div class="row col-12 mt-3 ">
                 <div class="col mx-1 pt-1 pb-1 bg-image text-white fs-4 border border-warning rounded-start-5 rounded-end-3 mb-5"
-                     style="background-image: url('{% static 'img/block.png' %}'); background-size: cover;">
-
-                    <p class="mt-3 bg-black opacity-75 rounded-5">Мы приготовили для вас:</p>
-                    <ul class="bg-black opacity-75 rounded-5">
+                     style="background-image: url('{% static 'img/block.png' %}'); background-size: cover; ">
+                    <div class="bg-black opacity-75 rounded-5">
                         <br>
-                        <li>
-                            <p>Вкусную еду и тёплый приём в уютном заведении!</p>
-                        </li>
-                        <li>
-                            <p>Бронирование столиков для хорошего вечера!</p>
-                        </li>
-                        <li>
-                            <p>Проведение разного рода мероприятий!</p>
-                        </li>
-                        <li>
-                            <p>Развлекательные программы для всех!</p>
-                        </li>
-                        <li>
-                            <p>Приятные цены!</p>
-                        </li>
-                        <br>
-                    </ul>
+                        <p><b>Мы приготовили для вас:</b></p>
+                        <ul>
+                            <br>
+                            {% for object in services %}
+                            <li>
+                                <p>{{ object }}</p>
+                            </li>
+                            {% endfor %}
+                            <br>
+                        </ul>
 
+                    </div>
                 </div>
-
                 <div class="col border mx-1 pt-1 pb-1 bg-image fs-4 text-white border-warning rounded-end-5 rounded-start-3 mb-5"
                      style="background-image: url('{% static 'img/block.png' %}'); background-size: cover;">
                     <div class="row">
                         <div class="col-6 bg-black opacity-75 rounded-start-5">
-                            <p><strong>Свяжитесь с нами, если у вас остались вопросы!</strong></p>
+                            <p class="mt-3"><strong>Свяжитесь с нами, если у вас остались вопросы!</strong></p>
                             <hr class="border border-warning border-1 opacity-75">
-                            <div class="mb-3">
-                                <label for="emailInput" class="form-label">Email адрес:</label>
-                                <input type="email" class="form-control" id="emailInput"
-                                       placeholder="name@example.com">
-                            </div>
-                            <div class="mb-3">
-                                <label for="emailInput" class="form-label">Номер телефона:</label>
-                                <input type="email" class="form-control" id="phoneInput"
-                                       placeholder="+7 (987) 654-32-10">
-                            </div>
-                            <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Ваше сообщение:</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                            </div>
-                            <button type="button" class="btn btn-warning form-control mb-3">Отправить</button>
+                            {% include 'restaurant/feedback.html'%}
                         </div>
-                        <div class="col-6 bg-black opacity-75 rounded-end-5">
-                            <p class="mb-0 mt-5"><u>Мы находимся по адресу:</u></p>
-                            <p class="mb-0">Санкт-Петербург</p>
-                            <p class="mb-0">Невский проспект</p>
-                            <p class="mb-0">Дом 10</p>
-                            <p class="mb-0">(Вход через арку)</p>
 
-                            <p class="mt-3 mb-0"><u>Номер телефона:</u></p>
-                            <p class="mb-0">+7 (987) 654-32-10</p>
+                        <div class="col-6 bg-black opacity-75 rounded-end-5">
+                            <p class="mb-0 mt-3">Адреса ресторанов:</p>
+                            <hr class="border-5 border-warning opacity-100">
+                            {% for object in contacts %}
+                            <div class="mt-3">
+                                <p class="mb-0">{{ object.city }}</p>
+                                <p class="mb-0">{{ object.street }}</p>
+                                <p class="mb-0">Дом {{ object.house_number }}</p>
+                                <p class="mb-0">{{ object.extra }}</p>
+
+                                <p class="mt-3 mb-0">Номер телефона:</p>
+                                <p class="mb-0">{{ object.phone }}</p>
+                                <hr class="border-5 border-warning opacity-100">
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

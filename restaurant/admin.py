@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from restaurant.models import HistoryRestaurant, MissionsRestaurant, StaffRestaurant
+from restaurant.models import HistoryRestaurant, MissionsRestaurant, StaffRestaurant, Description, Services, Contacts
 
 
 @admin.register(StaffRestaurant)
@@ -59,4 +59,40 @@ class HistoryAdmin(admin.ModelAdmin):
     )
     ordering = (
         "-year",
+    )
+
+
+@admin.register(Description)
+class DescriptionAdmin(admin.ModelAdmin):
+    list_display = (
+        "description",
+        "is_published",
+    )
+    list_filter = (
+        "is_published",
+    )
+
+
+@admin.register(Services)
+class ServicesAdmin(admin.ModelAdmin):
+    list_display = (
+        "service",
+        "is_published",
+    )
+    list_filter = (
+        "is_published",
+    )
+
+
+@admin.register(Contacts)
+class ServicesAdmin(admin.ModelAdmin):
+    list_display = (
+        "city",
+        "street",
+        "phone",
+    )
+    list_filter = (
+        "city",
+        "street",
+        "phone",
     )
