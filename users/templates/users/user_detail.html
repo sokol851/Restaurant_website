@@ -45,15 +45,15 @@
                 <div class="row">
                     <div class="col-4">
                         <a href="{% url 'users:user_update' object.pk %}" type="button"
-                           class="btn btn-dark form-control">Редактировать профиль</a>
+                           class="btn btn-dark form-control border-3 border-black">Редактировать профиль</a>
                     </div>
                     <div class="col-4">
                         <a href="{% url 'users:user_detail' pk=user.pk %}" type="button"
-                           class="btn btn-dark form-control">Управление текущими бронями</a>
+                           class="btn btn-dark form-control border-3 border-black">Управление текущими бронями</a>
                     </div>
                     <div class="col-4">
                         <a href="{% url 'users:user_delete' object.pk %}" type="button"
-                           class="btn btn-danger text-black form-control">Удалить аккаунт</a>
+                           class="btn btn-danger text-black form-control border-3 border-black">Удалить аккаунт</a>
                     </div>
                 </div>
             </div>
