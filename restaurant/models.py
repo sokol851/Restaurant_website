@@ -11,7 +11,7 @@ def upload(self, filename):
 
 
 def upload_for_bg(self, filename):
-    return 'bg/%s' % (filename, )
+    return 'bg/%s' % (filename,)
 
 
 class StaffRestaurant(models.Model):
