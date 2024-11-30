@@ -1,0 +1,57 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+{% block content %}
+<div class="col-12 mt-3 mb-5 container-fluid card rounded-5"
+     style="background-image: url('{% static 'img/block.png' %}'); background-size: cover;">
+    <div class="row">
+        <div class="col-md-12 col-xs-3 mt-3 text-white bg-black opacity-75 rounded-5 border-3">
+            <h3 class="card-title text-center">
+                Управление бронированиями:
+            </h3>
+        </div>
+        <div class="col-12 mt-3 mb-5 text-white rounded-5">
+            <div class="row">
+                <div class="col-12 border bg-black opacity-75 border-3 border-black rounded-4">
+                    {% for object in object_list %}
+                    <table class="table mt-2 table-dark table-sm table-bordered text-center">
+                        <tr class="d-flex">
+                            <th class="col-6">{{object.table}}</th>
+                            <td class="col-6">Создана: {{object.create_at}}</td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-6">{{object.user}}</td>
+                            <td class="col-6">{{object.phone}}</td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-6">Депозит: {{object.amount}} руб.
+                            </td>
+                            <td class="col-6"><p> Статус:
+                                {% if object.is_confirmed %}
+                                <span class="text-success">Подтверждена</span>
+                                {% else %}
+                                <span class="text-danger">Не подтверждена</span>
+                                {% endif %}</p>
+                            </td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-12">{{object.comment}}</td>
+                        </tr>
+                    </table>
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <a class="btn btn-warning form-control" href="{% url 'reservations:update_reservations' object.pk %}">Редактировать</a></div>
+                        <div class="col-6">
+                            <a class="btn btn-danger text-black form-control">Отменить бронь</a>
+                        </div>
+                    </div>
+                    <hr class="border-5 border-white opacity-100">
+                    {% endfor %}
+                    <a href="{% url 'users:user_detail' pk=user.pk %}"
+                       class="mb-3 btn btn-warning text-black form-control">Вернуться в профиль</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
