@@ -2,19 +2,19 @@
 {% load static %}
 {% block content %}
 
-<div class="col-12 mt-3 mb-4 container-fluid card rounded-5"
+<div class="col-12 mt-3 mb-5 container-fluid card rounded-5"
      style="background-image: url('{% static 'img/block.png' %}'); background-size: cover;">
 
     <div class="row">
 
-        <div class="col-12 mt-3 text-white bg-black opacity-75 rounded-5 border-3">
+        <div class="col-md-12 col-xs-3 mt-3 text-white bg-black opacity-75 rounded-5 border-3">
             <h3 class="card-title text-center">
                 {{ title }}
             </h3>
         </div>
 
 
-        <div class="col-4 mt-3 mb-5 text-white rounded-5">
+        <div class="col-lg-4 col-xs-1 mt-3 mb-5 text-white rounded-5">
 
             <div class="col-12 bg-warning text-black rounded-5 opacity-75 text-center">
                 <p class="fs-3"><strong>Наша команда</strong></p>
@@ -30,11 +30,11 @@
                         <td class="col-6 bg-black rounded-5 opacity-75 text-center">
                             <p>{{object.first_name}} {{object.last_name}}</p>
                             <p>Должность: {{object.position}}</p>
-                            <p>В команде:
-                                {{ object.experience.years }} {{ object.naming_year }}
+                            <p>В команде:</p>
+                            <p> {{ object.experience.years }} {{ object.naming_year }}
                                 {{ object.experience.months }} {{ object.naming_month }}
-                                {{ object.experience.days }} {{ object.naming_day }}
-                            </p>
+                                {{ object.experience.days }} {{ object.naming_day }}</p>
+
                         </td>
                     </tr>
                 </table>
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="col-4 mt-3 text-white">
+        <div class="col-lg-4 col-xs-1 mt-3 mb-5 text-white">
             <div class="col-12 bg-warning text-center text-black rounded-5 opacity-75">
                 <p class="fs-3"><strong>Наша история</strong></p>
             </div>
@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <div class="col-4 mt-3 text-white">
+        <div class="col-lg-4 col-xs-1 mt-3 mb-5 text-white">
             <div class="col-12 bg-warning text-black rounded-5 opacity-75 text-center">
                 <p class="fs-3"><strong>Наша миссия</strong></p>
             </div>
