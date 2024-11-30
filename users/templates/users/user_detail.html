@@ -33,7 +33,7 @@
                     </table>
                     <div class="row">
                         <div class="col-12">
-                            {% include 'reservations/reservations_list.html'%}
+<!--                            {% include 'reservations/reservation_list.html'%}-->
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                            class="btn btn-dark form-control border-3 border-black">Редактировать профиль</a>
                     </div>
                     <div class="col-md-4 col-sx-1">
-                        <a href="{% url 'users:user_detail' pk=user.pk %}" type="button"
+                        <a href="/reservations" type="button"
                            class="btn btn-dark form-control border-3 border-black">Управление текущими бронями</a>
                     </div>
                     <div class="col-md-4 col-sx-1">
