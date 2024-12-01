@@ -8,16 +8,20 @@ class Command(BaseCommand):
     """
     Создаём доступные столы
     """
+
     def handle(self, *args, **options):
         numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        year_now = datetime.now().year
+        month_now = datetime.now().month
+        day_now = datetime.now().day
         datetime_objs = [
-            datetime(2024, 11, 29, 10),
-            datetime(2024, 11, 29, 12),
-            datetime(2024, 11, 29, 14),
-            datetime(2024, 11, 29, 16),
-            datetime(2024, 11, 29, 18),
-            datetime(2024, 11, 29, 20),
-            datetime(2024, 11, 29, 22),
+            datetime(year_now, month_now, day_now, hour=10),
+            datetime(year_now, month_now, day_now, hour=12),
+            datetime(year_now, month_now, day_now, hour=14),
+            datetime(year_now, month_now, day_now, hour=16),
+            datetime(year_now, month_now, day_now, hour=18),
+            datetime(year_now, month_now, day_now, hour=20),
+            datetime(year_now, month_now, day_now, hour=22),
         ]
 
         cities = [

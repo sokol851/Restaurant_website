@@ -4,9 +4,6 @@ from django.db import models
 
 from users.models import NULLABLE
 
-from django.dispatch import receiver
-from django.db.models.signals import post_save
-
 
 class Table(models.Model):
     RESTAURANTS = {
@@ -52,6 +49,10 @@ class Reservation(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Стол'
     )
+    old_table = models.IntegerField(
+        verbose_name='id предыдущего стола',
+        **NULLABLE
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -84,10 +85,3 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name} - {self.table}'
-
-
-@receiver(post_save, sender=Reservation)
-def toggle_available(sender, instance: Reservation, created, **kwargs):
-    if created:
-        instance.table.available = False
-        instance.table.save()
