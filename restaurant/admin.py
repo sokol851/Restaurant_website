@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from restaurant.models import HistoryRestaurant, MissionsRestaurant, StaffRestaurant, Description, Services, Contacts
+from restaurant.models import HistoryRestaurant, MissionsRestaurant, StaffRestaurant, Description, Services, Contacts, \
+    Restaurant
 
 
 @admin.register(StaffRestaurant)
@@ -85,7 +86,7 @@ class ServicesAdmin(admin.ModelAdmin):
 
 
 @admin.register(Contacts)
-class ServicesAdmin(admin.ModelAdmin):
+class ContactsAdmin(admin.ModelAdmin):
     list_display = (
         "city",
         "street",
@@ -95,4 +96,16 @@ class ServicesAdmin(admin.ModelAdmin):
         "city",
         "street",
         "phone",
+    )
+
+
+@admin.register(Restaurant)
+class RestaurantAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "city",
+    )
+    list_filter = (
+        "name",
+        "city",
     )

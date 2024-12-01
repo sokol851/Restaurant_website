@@ -8,19 +8,19 @@ class TableAdmin(admin.ModelAdmin):
     list_display = (
         "number",
         "restaurant",
-        "datetime",
+        "is_datetime",
         "available",
     )
     list_filter = (
         "restaurant",
         "number",
-        "datetime",
+        "is_datetime",
         "available",
     )
     ordering = (
         "restaurant",
         "number",
-        "datetime",
+        "is_datetime",
         "available",
     )
     search_fields = (
