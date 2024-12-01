@@ -4,9 +4,6 @@ from django.db import models
 
 from users.models import NULLABLE
 
-from django.dispatch import receiver
-from django.db.models.signals import post_save
-
 
 class Table(models.Model):
     RESTAURANTS = {
@@ -51,6 +48,10 @@ class Reservation(models.Model):
         Table,
         on_delete=models.CASCADE,
         verbose_name='Стол'
+    )
+    old_table = models.IntegerField(
+        verbose_name='id предыдущего стола',
+        **NULLABLE
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
