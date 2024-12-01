@@ -3,26 +3,23 @@ from django.conf import settings
 from django.db import models
 
 from reservations.validators import check_amount
+from restaurant.models import Restaurant
 from users.models import NULLABLE
 
 
 class Table(models.Model):
-    RESTAURANTS = {
-        "SPB": "Saint-Petersburg",
-        "MSK": "Moscow",
-    }
 
     number = models.SmallIntegerField(
         verbose_name='Номер столика'
     )
-    datetime = models.DateTimeField(
+    is_datetime = models.DateTimeField(
         verbose_name='Время',
         **NULLABLE
     )
-    restaurant = models.CharField(
-        max_length=10,
-        choices=RESTAURANTS,
-        verbose_name='Ресторан'
+    restaurant = models.ForeignKey(
+        Restaurant,
+        verbose_name='Ресторан',
+        on_delete=models.CASCADE
     )
     places = models.CharField(
         max_length=30,
@@ -37,11 +34,12 @@ class Table(models.Model):
     class Meta:
         verbose_name = 'Столик'
         verbose_name_plural = 'Столики'
+        ordering = ['restaurant', 'number', 'is_datetime']
 
     def __str__(self):
         return (f'{self.restaurant} - Стол №{self.number}'
-                f' {self.datetime.date()} '
-                f'{(self.datetime + timedelta(hours=3)).time()}')
+                f' {self.is_datetime.date()} '
+                f'{(self.is_datetime + timedelta(hours=3)).time()}')
 
 
 class Reservation(models.Model):
@@ -80,6 +78,16 @@ class Reservation(models.Model):
     is_confirmed = models.BooleanField(
         default=False,
         verbose_name='Подтвержденная бронь'
+    )
+    session_id = models.CharField(
+        max_length=150,
+        verbose_name='Сессия',
+        **NULLABLE
+    )
+    link = models.URLField(
+        max_length=500,
+        verbose_name='Cсылка на оплату',
+        **NULLABLE
     )
 
     class Meta:

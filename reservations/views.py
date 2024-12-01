@@ -5,6 +5,7 @@ from django.views.generic import ListView, UpdateView, CreateView
 
 from reservations.forms import ReservationCreateForm, ReservationUpdateForm
 from reservations.models import Reservation
+from reservations.services import create_product, create_price, create_session, get_status_session
 
 
 class ReservationListView(LoginRequiredMixin, ListView):
@@ -37,6 +38,12 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
             return self.object
         raise PermissionDenied
 
+    def form_valid(self, form):
+        self.object = form.save()
+        # x = get_status_session(self.object.session_id)  # Получаем сессию
+        # print(x.payment_status)  # Получаем статус сессии
+        return super().form_valid(form)
+
 
 class ReservationCreateView(LoginRequiredMixin, CreateView):
     """
@@ -49,5 +56,11 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         self.object = form.save()
         self.object.user = self.request.user
+
+        stripe_product = create_product(product=self.object)  # Создаём продукт
+        stripe_price = create_price(stripe_product, self.object.amount)  # Создаём цену
+        session_id, payment_link = create_session(stripe_price)  # Создаём сессию и ссылку
+        self.object.session_id = session_id
+        self.object.link = payment_link
         self.object.save()
         return super().form_valid(form)

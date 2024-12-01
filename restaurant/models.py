@@ -14,6 +14,18 @@ def upload_for_bg(self, filename):
     return 'bg/%s' % (filename,)
 
 
+class Restaurant(models.Model):
+    name = models.CharField(max_length=150, verbose_name='Название')
+    city = models.CharField(max_length=150, verbose_name='Город')
+
+    class Meta:
+        verbose_name = 'Ресторан'
+        verbose_name_plural = 'Рестораны'
+
+    def __str__(self):
+        return f'{self.name} - {self.city}'
+
+
 class StaffRestaurant(models.Model):
     DAYS = ['дня', 'дней', 'день']
     MONTHS = ['месяца', 'месяцев', 'месяц']

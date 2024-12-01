@@ -2,6 +2,7 @@ from datetime import datetime
 from django.core.management import BaseCommand
 
 from reservations.models import Table
+from restaurant.models import Restaurant
 
 
 class Command(BaseCommand):
@@ -24,17 +25,14 @@ class Command(BaseCommand):
             datetime(year_now, month_now, day_now, hour=22),
         ]
 
-        cities = [
-            'SPB',
-            'MSK'
-        ]
+        cities = Restaurant.objects.all()
 
         for city in cities:
             for number in numbers:
                 for datetime_obj in datetime_objs:
                     table = Table.objects.create(
                         number=number,
-                        datetime=datetime_obj,
+                        is_datetime=datetime_obj,
                         restaurant=city
                     )
                     table.save()

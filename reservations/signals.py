@@ -8,6 +8,7 @@ from reservations.models import Reservation, Table
 def toggle_available(sender, instance, created, **kwargs):
     if created:
         Reservation.objects.filter(id=instance.id).update(old_table=instance.table.id)
+        Table.objects.filter(id=instance.table.id).update(available=False)
     if not created:
         if instance.is_confirmed is True:
             Table.objects.filter(id=instance.old_table).update(available=True)

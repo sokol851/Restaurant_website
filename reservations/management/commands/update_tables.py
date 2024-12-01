@@ -1,7 +1,5 @@
-from datetime import timedelta, date, time, datetime
+from datetime import timedelta, datetime
 
-import pytz
-from dateutil.relativedelta import relativedelta
 from django.core.management import BaseCommand
 
 from reservations.models import Table
@@ -16,8 +14,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         numbers_table = Table.objects.all()
         for table in numbers_table:
-            if datetime.now().timestamp() > table.datetime.timestamp():
+            if datetime.now().timestamp() > table.is_datetime.timestamp():
                 Table.objects.filter(id=table.id).update(
-                    datetime=table.datetime + timedelta(days=1),
+                    is_datetime=table.is_datetime + timedelta(days=1),
                     available=True,
                 )
