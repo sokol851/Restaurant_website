@@ -20,7 +20,7 @@
                         </tr>
                         <tr class="d-flex">
                             <td class="col-6">{{object.user}}</td>
-                            <td class="col-6">{{object.phone}}</td>
+                            <td class="col-6">Номер телефона: {{object.phone}}</td>
                         </tr>
                         <tr class="d-flex">
                             <td class="col-6">Депозит: {{object.amount}} руб.
@@ -34,17 +34,36 @@
                             </td>
                         </tr>
                         <tr class="d-flex">
-                            <td class="col-12">{{object.comment}}</td>
+                            <td class="col-12">Комментарий: {{object.comment}}</td>
                         </tr>
                     </table>
+                    {% if object.is_confirmed %}
                     <div class="row mb-2">
                         <div class="col-6">
                             <a class="btn btn-warning form-control"
-                               href="{% url 'reservations:update_reservations' object.pk %}">Редактировать</a></div>
+                               href="{% url 'reservations:update_reservations' object.pk %}">Редактировать</a>
+                        </div>
                         <div class="col-6">
-                            <a class="btn btn-danger text-black form-control">Отменить бронь</a>
+                            <a class="btn btn-danger text-black form-control"
+                               href="{% url 'reservations:delete_reservations' object.pk %}">Отменить бронь</a>
                         </div>
                     </div>
+                    {% else %}
+                    <div class="row mb-2">
+                        <div class="col-4">
+                            <a class="btn btn-success form-control"
+                               href="{{ object.link }}">Подтвердить</a>
+                        </div>
+                        <div class="col-4">
+                            <a class="btn btn-warning form-control"
+                               href="{% url 'reservations:update_reservations' object.pk %}">Редактировать</a>
+                        </div>
+                        <div class="col-4">
+                            <a class="btn btn-danger text-black form-control"
+                               href="{% url 'reservations:delete_reservations' object.pk %}">Отменить бронь</a>
+                        </div>
+                    </div>
+                    {% endif %}
                     <hr class="border-5 border-white opacity-100">
                     {% endfor %}
                     <a href="{% url 'users:user_detail' pk=user.pk %}"
