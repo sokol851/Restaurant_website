@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db import models
 
+from reservations.validators import check_amount
 from users.models import NULLABLE
 
 
@@ -56,7 +57,8 @@ class Reservation(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        verbose_name='Пользователь'
+        verbose_name='Пользователь',
+        **NULLABLE
     )
     phone = models.CharField(
         max_length=20,
@@ -68,7 +70,8 @@ class Reservation(models.Model):
     )
     amount = models.IntegerField(
         default=500,
-        verbose_name='Депозит'
+        verbose_name='Депозит',
+        validators=[check_amount]
     )
     create_at = models.DateTimeField(
         default=datetime.today(),
