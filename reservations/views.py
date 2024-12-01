@@ -1,7 +1,7 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView, CreateView
+from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 
 from reservations.forms import ReservationCreateForm, ReservationUpdateForm
 from reservations.models import Reservation
@@ -38,12 +38,6 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
             return self.object
         raise PermissionDenied
 
-    def form_valid(self, form):
-        self.object = form.save()
-        # x = get_status_session(self.object.session_id)  # Получаем сессию
-        # print(x.payment_status)  # Получаем статус сессии
-        return super().form_valid(form)
-
 
 class ReservationCreateView(LoginRequiredMixin, CreateView):
     """
@@ -55,12 +49,25 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        self.object.user = self.request.user
 
-        stripe_product = create_product(product=self.object)  # Создаём продукт
-        stripe_price = create_price(stripe_product, self.object.amount)  # Создаём цену
-        session_id, payment_link = create_session(stripe_price)  # Создаём сессию и ссылку
+        # Создаём продукт
+        stripe_product = create_product(product=self.object)
+        # Создаём цену
+        stripe_price = create_price(stripe_product, self.object.amount)
+        # Создаём сессию и ссылку
+        session_id, payment_link = create_session(stripe_price)
+
+        # Присваиваем значения объекту
+        self.object.user = self.request.user
         self.object.session_id = session_id
         self.object.link = payment_link
         self.object.save()
         return super().form_valid(form)
+
+
+class ReservationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Reservation
+    success_url = reverse_lazy('reservations:list_reservations')
+
+    def test_func(self):
+        return self.request.user.is_superuser
