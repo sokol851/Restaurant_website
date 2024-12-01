@@ -10,7 +10,7 @@ class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Reservation
         # fields = '__all__'
-        exclude = ('user', 'create_at', 'is_confirmed', 'amount')
+        exclude = ('user', 'old_table', 'create_at', 'is_confirmed', 'amount',)
 
 
 class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
@@ -19,4 +19,4 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Reservation
         # fields = '__all__'
-        exclude = ('user', 'create_at', 'is_confirmed',)
+        exclude = ('user', 'old_table', 'create_at', 'is_confirmed',)

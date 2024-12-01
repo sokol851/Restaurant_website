@@ -17,10 +17,18 @@
             <div class="card-body mb-3 mt-3 text-white bg-black opacity-75 rounded-5 mx-3">
                 {% csrf_token %}
                 {{ form.as_p }}
+                <p class="text-center text-black form-control bg-danger">Для подтверждения брони необходимо внести
+                    депозит.</p>
+                {% if object %}
                 <button type="submit" class="btn btn-success form-control">
                     Сохранить
                 </button>
-                <a href="/reservations" type="button"
+                {% else %}
+                <button type="submit" class="btn btn-success form-control">
+                    Подтвердить бронь
+                </button>
+                {% endif %}
+                <a href="{% url 'reservations:list_reservations'%}" type="button"
                    class="mt-1 btn btn-warning form-control">
                     Вернуться к списку
                 </a>

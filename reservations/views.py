@@ -1,12 +1,13 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, CreateView
 
 from reservations.forms import ReservationCreateForm, ReservationUpdateForm
 from reservations.models import Reservation
 
 
-class ReservationListView(ListView):
+class ReservationListView(LoginRequiredMixin, ListView):
     """
         Контроллер отображения списка броней.
     """
@@ -22,7 +23,7 @@ class ReservationListView(ListView):
         return context
 
 
-class ReservationUpdateView(UpdateView):
+class ReservationUpdateView(LoginRequiredMixin, UpdateView):
     """
         Контроллер редактирования броней.
     """
@@ -30,22 +31,23 @@ class ReservationUpdateView(UpdateView):
     form_class = ReservationUpdateForm
     success_url = reverse_lazy('restaurant:index')
 
-    def post(self, request, pk):
-        self.old_object = Reservation.objects.get(pk=pk)
-        table = self.old_object.table
-        table.available = True
-        table.save()
-        return super().post(request)
-
-    def form_valid(self, form):
-        self.object = form.save()
-        table = self.object.table
-        table.available = False
-        table.save()
-        return super().form_valid(form)
-
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
         if self.request.user == self.object.user or self.request.user.is_superuser:
             return self.object
         raise PermissionDenied
+
+
+class ReservationCreateView(LoginRequiredMixin, CreateView):
+    """
+        Контроллер создания броней.
+    """
+    model = Reservation
+    form_class = ReservationCreateForm
+    success_url = reverse_lazy('reservations:list_reservations')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.user = self.request.user
+        self.object.save()
+        return super().form_valid(form)
