@@ -84,10 +84,3 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name} - {self.table}'
-
-
-@receiver(post_save, sender=Reservation)
-def toggle_available(sender, instance: Reservation, created, **kwargs):
-    if created:
-        instance.table.available = False
-        instance.table.save()
