@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.core.management import BaseCommand
 
 from reservations.models import Table
@@ -11,10 +11,11 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         year_now = datetime.now().year
         month_now = datetime.now().month
         day_now = datetime.now().day
+
+        # Время столов
         datetime_objs = [
             datetime(year_now, month_now, day_now, hour=10),
             datetime(year_now, month_now, day_now, hour=12),
@@ -25,10 +26,12 @@ class Command(BaseCommand):
             datetime(year_now, month_now, day_now, hour=22),
         ]
 
+        # Получаем рестораны
         cities = Restaurant.objects.all()
 
+        # Создаём столы
         for city in cities:
-            for number in numbers:
+            for number in range(1, city.tables_count + 1):
                 for datetime_obj in datetime_objs:
                     table = Table.objects.create(
                         number=number,
@@ -36,3 +39,12 @@ class Command(BaseCommand):
                         restaurant=city
                     )
                     table.save()
+
+        # Сразу проверяем просроченные столы
+        numbers_table = Table.objects.all()
+        for table in numbers_table:
+            if datetime.now().timestamp() > table.is_datetime.timestamp():
+                Table.objects.filter(id=table.id).update(
+                    is_datetime=table.is_datetime + timedelta(days=1),
+                    available=True,
+                )

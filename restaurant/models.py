@@ -17,6 +17,7 @@ def upload_for_bg(self, filename):
 class Restaurant(models.Model):
     name = models.CharField(max_length=150, verbose_name='Название')
     city = models.CharField(max_length=150, verbose_name='Город')
+    tables_count = models.SmallIntegerField(verbose_name='Количество столов', default=10)
 
     class Meta:
         verbose_name = 'Ресторан'

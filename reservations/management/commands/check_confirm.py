@@ -17,8 +17,10 @@ class Command(BaseCommand):
                      i.table.is_datetime.timestamp())
             if not i.is_confirmed:
                 if delta > -1800:
+                    # Создаём запись в историю об этом
                     HistoryReservations.objects.create(
                         status=f'Оплата брони ({i.table}) просрочена!',
                         user=i.user,
                         create_at=datetime.now())
+                    # Удаляем
                     i.delete()
