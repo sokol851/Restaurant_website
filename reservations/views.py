@@ -13,6 +13,7 @@ from reservations.forms import (
     ReservationUpdateForm
 )
 from reservations.models import Reservation
+from restaurant.models import Restaurant
 
 
 class ReservationListView(LoginRequiredMixin, ListView):
@@ -46,6 +47,11 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
             return self.object
         raise PermissionDenied
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['scheme_tables'] = Restaurant.objects.all()
+        return context
+
 
 class ReservationCreateView(LoginRequiredMixin, CreateView):
     """
@@ -59,6 +65,11 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['scheme_tables'] = Restaurant.objects.all()
+        return context
 
 
 class ReservationDeleteView(LoginRequiredMixin,
