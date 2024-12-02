@@ -14,10 +14,19 @@ def upload_for_bg(self, filename):
     return 'bg/%s' % (filename,)
 
 
+def upload_for_restaurant(self, filename):
+    return 'restaurant/%s' % (filename,)
+
+
 class Restaurant(models.Model):
     name = models.CharField(max_length=150, verbose_name='Название')
     city = models.CharField(max_length=150, verbose_name='Город')
-    tables_count = models.SmallIntegerField(verbose_name='Количество столов', default=10)
+    tables_count = models.SmallIntegerField(verbose_name='Количество столов',
+                                            default=10)
+    scheme_tables = models.ImageField(upload_to=upload_for_restaurant,
+                                      **NULLABLE,
+                                      verbose_name='Фото'
+                                      )
 
     class Meta:
         verbose_name = 'Ресторан'
