@@ -1,14 +1,13 @@
-from datetime import timedelta, datetime
+from datetime import datetime
 
 from django.core.management import BaseCommand
 
 from reservations.models import Reservation, HistoryReservations
-from reservations.services import get_status_session
 
 
 class Command(BaseCommand):
     """
-     Находит неоплаченные брони и удаляет их за 2 часа до начала события.
+     Находит неоплаченные брони и удаляет их за 30 минут до начала события.
     """
 
     def handle(self, *args, **options):
@@ -17,7 +16,7 @@ class Command(BaseCommand):
             delta = (datetime.now().timestamp() -
                      i.table.is_datetime.timestamp())
             if not i.is_confirmed:
-                if delta > -7200:
+                if delta > -1800:
                     HistoryReservations.objects.create(
                         status=f'Оплата брони ({i.table}) просрочена!',
                         user=i.user,

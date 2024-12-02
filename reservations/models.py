@@ -1,10 +1,8 @@
 from datetime import datetime, timedelta
 
-import stripe
 from django.conf import settings
 from django.db import models
 
-from reservations.services import get_status_session
 from reservations.validators import check_amount, phone_number
 from restaurant.models import Restaurant
 from users.models import NULLABLE

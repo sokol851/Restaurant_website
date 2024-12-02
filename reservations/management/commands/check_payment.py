@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import datetime
 
 from django.core.management import BaseCommand
 
@@ -16,11 +16,11 @@ class Command(BaseCommand):
         for i in reservation:
             payment = get_status_session(i.session_id)
             if payment.payment_status == 'paid':
-                i.is_confirmed = True
-                i.save()
-                if not HistoryReservations.objects.filter(status=f'Бронь ({i.table}) подтверждена!', ):
+                if not i.is_confirmed:
                     HistoryReservations.objects.create(
                         status=f'Бронь ({i.table}) подтверждена!',
                         user=i.user,
                         create_at=datetime.now()
                     )
+                    i.is_confirmed = True
+                    i.save()
