@@ -1,8 +1,6 @@
 from django.contrib.auth import views
 from django.urls import path
 
-from django.conf import settings
-from django.conf.urls.static import static
 from users.apps import UsersConfig
 from users.views import (CustomLoginView, EmailConfirmationSentView,
                          ProfileDeleteView, ProfileDetailView,

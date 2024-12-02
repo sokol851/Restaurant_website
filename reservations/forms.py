@@ -11,7 +11,13 @@ class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Reservation
         # fields = '__all__'
-        exclude = ('user', 'old_table', 'create_at', 'is_confirmed', 'amount', 'session_id', 'link',)
+        exclude = ('user',
+                   'old_table',
+                   'create_at',
+                   'is_confirmed',
+                   'amount',
+                   'session_id',
+                   'link',)
 
 
 class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
@@ -19,9 +25,15 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['table'].queryset = models.Table.objects.all().filter(available=True)
+        self.fields['table'].queryset = (
+            models.Table.objects.all().filter(available=True))
 
     class Meta:
         model = Reservation
         # fields = '__all__'
-        exclude = ('user', 'old_table', 'create_at', 'is_confirmed', 'session_id', 'link',)
+        exclude = ('user',
+                   'old_table',
+                   'create_at',
+                   'is_confirmed',
+                   'session_id',
+                   'link',)

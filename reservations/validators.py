@@ -4,9 +4,11 @@ import re
 
 def check_amount(value):
     if value < 500:
-        raise forms.ValidationError("Сумма депозита должна быть выше 500 руб.")
+        raise forms.ValidationError(
+            "Сумма депозита должна быть выше 500 руб.")
     if value > 10000:
-        raise forms.ValidationError("Сумма депозита слишком большая, возможно вы ошиблись.")
+        raise forms.ValidationError(
+            "Сумма депозита слишком большая, возможно вы ошиблись.")
     else:
         return value
 

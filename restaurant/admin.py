@@ -1,7 +1,12 @@
 from django.contrib import admin
 
-from restaurant.models import HistoryRestaurant, MissionsRestaurant, StaffRestaurant, Description, Services, Contacts, \
-    Restaurant
+from restaurant.models import (HistoryRestaurant,
+                               MissionsRestaurant,
+                               StaffRestaurant,
+                               Description,
+                               Services,
+                               Contacts,
+                               Restaurant)
 
 
 @admin.register(StaffRestaurant)
