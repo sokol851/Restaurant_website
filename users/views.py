@@ -12,6 +12,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, FormView,
                                   TemplateView, UpdateView)
 
 from config import settings
+from reservations.models import Reservation, HistoryReservations
 from restaurant.models import Services
 from users.forms import (CustomLoginForm, UserPasswordResetForm,
                          UserProfileForm, UserRegisterForm)
@@ -85,7 +86,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['reservations'] = Services.objects.all()
+        context['history_reservations'] = HistoryReservations.objects.all().filter(user=self.request.user)
         return context
 
 
