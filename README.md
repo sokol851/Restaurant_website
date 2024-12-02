@@ -1,14 +1,20 @@
 ## Сайт для бронирования столиков в ресторане (DF2)
 
 ### Главная страница
-![plot](./static/img/index.png)
+![index](./static/img/index.png)
 
 ### О ресторане:
-![plot](./static/img/about_site.png)
+![about](./static/img/about_site.png)
 
 ### Профиль пользователя:
-![plot](./static/img/profile.png)
+![profile](./static/img/profile.png)
 
+
+python manage.py csu
+
+python manage.py create_tables
+
+python manage.py update_tables
 
 ____________________________
 Описание задачи:

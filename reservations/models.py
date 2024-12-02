@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 from reservations.validators import check_amount, phone_number
 from restaurant.models import Restaurant
@@ -73,7 +74,7 @@ class Reservation(models.Model):
         validators=[check_amount]
     )
     create_at = models.DateTimeField(
-        default=datetime.today(),
+        default=timezone.now,
         verbose_name='Время создания'
     )
     is_confirmed = models.BooleanField(
@@ -107,7 +108,7 @@ class HistoryReservations(models.Model):
         **NULLABLE
     )
     create_at = models.DateTimeField(
-        default=datetime.today(),
+        default=timezone.now,
         verbose_name='Время создания'
     )
     status = models.CharField(

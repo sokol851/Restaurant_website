@@ -1,8 +1,7 @@
-from datetime import datetime
-
 import stripe
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.utils import timezone
 
 from reservations.models import (
     Reservation,
@@ -37,25 +36,19 @@ def toggle_available(sender, instance, created, **kwargs):
         # Запись в историю о создании брони.
         HistoryReservations.objects.create(
             user=instance.user,
-            create_at=datetime.now(),
-            status=f'Ожидаем вас в '
+            create_at=timezone.localtime(timezone.now()),
+            status=f'Ожидаем подтверждения брони - '
                    f'({Table.objects.get(id=instance.table.id)})',
         )
-
-        # Если подтверждена при создании, то стол становится недоступен.
-        if instance.is_confirmed:
-            Table.objects.filter(id=instance.table.id).update(available=False)
+        # Делаем стол не доступным
+        Table.objects.filter(id=instance.table.id).update(available=False)
 
     #  Если объект уже создан
     if not created:
-        #  Если была подтверждена, то старый стол стал доступен, новый - нет.
-        if instance.is_confirmed is True:
-            Table.objects.filter(id=instance.old_table).update(available=True)
-            Table.objects.filter(id=instance.table.id).update(available=False)
-        #  Если не была подтверждена, то все столы остаются доступными.
-        else:
-            Table.objects.filter(id=instance.old_table).update(available=True)
-            Table.objects.filter(id=instance.table.id).update(available=True)
+        # Старый стол стал доступен
+        Table.objects.filter(id=instance.old_table).update(available=True)
+        # Новый стол - не доступен
+        Table.objects.filter(id=instance.table.id).update(available=False)
 
         #  Обновляем значение поля old_table.
         (Reservation.objects.filter(id=instance.id).
@@ -67,12 +60,13 @@ def toggle_available(sender, instance, created, **kwargs):
                 status=f'Бронь ({Table.objects.get(id=instance.old_table)})'
                        f' изменена на ({str(instance.table)})',
                 user=instance.user,
-                create_at=datetime.now()
+                create_at=timezone.localtime(timezone.now())
             )
 
 
 @receiver(post_delete, sender=Reservation)
 def toggle_available_delete(sender, instance: Reservation, **kwargs):
+
     #  Стол становится доступным
     Table.objects.filter(id=instance.table.id).update(available=True)
 
@@ -80,10 +74,13 @@ def toggle_available_delete(sender, instance: Reservation, **kwargs):
     HistoryReservations.objects.create(
         status=f'Бронь ({str(instance.table)}) удалена!',
         user=instance.user,
-        create_at=datetime.now()
+        create_at=timezone.localtime(timezone.now())
     )
 
-    if (stripe.checkout.Session.retrieve(instance.session_id).
-            payment_status == "paid"):
+    # Оформляем возврат, если была оплата и время события не наступило.
+    if ((stripe.checkout.Session.retrieve(instance.session_id).
+                 payment_status == "paid")
+            and timezone.localtime(timezone.now()).timestamp() <
+            instance.table.is_datetime.timestamp()):
         print('Оформлен возврат депозита на карту')
         # print(stripe.Refund.create(charge=instance.session_id))
