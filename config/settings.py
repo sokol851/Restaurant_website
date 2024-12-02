@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 from decouple import config
 
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_celery_beat",
     "corsheaders",
     "users",
     "reservations",
@@ -155,6 +156,21 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 SITE_URL = config("SITE_URL")
+
+# Celery Configuration Options
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = config("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")
+CELERY_TIMEZONE = config("CELERY_TIMEZONE")
+CELERY_TASK_TRACK_STARTED = config('CELERY_TASK_TRACK_STARTED') == "True"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_BEAT_SCHEDULE = {
+    'update_reservations': {
+        'task': 'reservations.tasks.update_reservations',
+        'schedule': timedelta(seconds=10), }
+}
+
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 CORS_ALLOWED_ORIGINS = [
     config("CORS_ALLOWED_ORIGINS_1"),

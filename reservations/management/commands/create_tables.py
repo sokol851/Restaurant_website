@@ -1,9 +1,4 @@
-from datetime import datetime, timedelta
 from django.core.management import BaseCommand
-from django.utils import timezone
-
-from reservations.models import Table
-from restaurant.models import Restaurant
 
 
 class Command(BaseCommand):
@@ -12,20 +7,17 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
+        from django.utils import timezone
+        from datetime import datetime, timedelta
+        from reservations.models import Table
+        from restaurant.models import Restaurant
+
         year_now = timezone.localtime(timezone.now()).year
         month_now = timezone.localtime(timezone.now()).month
         day_now = timezone.localtime(timezone.now()).day
 
         # Время столов
-        datetime_objs = [
-            timezone.make_aware(datetime(year_now, month_now, day_now, hour=10)),
-            timezone.make_aware(datetime(year_now, month_now, day_now, hour=12)),
-            timezone.make_aware(datetime(year_now, month_now, day_now, hour=14)),
-            timezone.make_aware(datetime(year_now, month_now, day_now, hour=16)),
-            timezone.make_aware(datetime(year_now, month_now, day_now, hour=18)),
-            timezone.make_aware(datetime(year_now, month_now, day_now, hour=20)),
-            timezone.make_aware(datetime(year_now, month_now, day_now, hour=22)),
-        ]
+        hours = [10, 12, 14, 16, 18, 20, 22]
 
         # Получаем рестораны
         cities = Restaurant.objects.all()
@@ -33,13 +25,22 @@ class Command(BaseCommand):
         # Создаём столы
         for city in cities:
             for number in range(1, city.tables_count + 1):
-                for datetime_obj in datetime_objs:
-                    table = Table.objects.create(
-                        number=number,
-                        is_datetime=datetime_obj,
-                        restaurant=city
-                    )
-                    table.save()
+                for hour in hours:
+
+                    # Создаём экземпляр времени
+                    datetime_obj = timezone.make_aware(datetime(year_now,
+                                                                month_now,
+                                                                day_now,
+                                                                hour=hour))
+                    # Проверяем, что стол не создан
+                    if not Table.objects.filter(number=number,
+                                                is_datetime=datetime_obj,
+                                                restaurant=city):
+                        # Создаём стол
+                        table = Table.objects.create(number=number,
+                                                     is_datetime=datetime_obj,
+                                                     restaurant=city)
+                        table.save()
 
         # Сразу проверяем просроченные столы
         numbers_table = Table.objects.all()

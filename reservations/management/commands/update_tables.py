@@ -1,9 +1,4 @@
-from datetime import timedelta
-
 from django.core.management import BaseCommand
-from django.utils import timezone
-
-from reservations.models import Table, Reservation, HistoryReservations
 
 
 class Command(BaseCommand):
@@ -13,6 +8,10 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
+        from datetime import timedelta
+        from django.utils import timezone
+        from reservations.models import Table, Reservation, HistoryReservations
+
         numbers_table = Table.objects.all()
         reservations = Reservation.objects.all()
         for table in numbers_table:
@@ -28,7 +27,6 @@ class Command(BaseCommand):
                 # Проверяем существующие резервы и завершаем просроченные.
                 for reservation in reservations:
                     if table == reservation.table:
-
                         # Создаём запись в историю об этом.
                         HistoryReservations.objects.create(
                             status=f'Событие ({reservation.table}) завершено!',
