@@ -1,7 +1,4 @@
-from django.utils import timezone
 from django.core.management import BaseCommand
-
-from reservations.models import Reservation, HistoryReservations
 
 
 class Command(BaseCommand):
@@ -10,6 +7,9 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
+        from django.utils import timezone
+        from reservations.models import Reservation, HistoryReservations
+
         reservations = Reservation.objects.all()
 
         for reservation in reservations:

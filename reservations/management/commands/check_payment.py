@@ -10,6 +10,10 @@ class Command(BaseCommand):
         from datetime import datetime
         from reservations.models import Reservation, HistoryReservations
         from reservations.services import get_status_session
+        import stripe
+        from decouple import config
+
+        stripe.api_key = config('API_KEY_STRIPE')
 
         reservation = Reservation.objects.all()
         for i in reservation:
