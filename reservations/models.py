@@ -1,14 +1,16 @@
 from datetime import datetime, timedelta
+
+import stripe
 from django.conf import settings
 from django.db import models
 
+from reservations.services import get_status_session
 from reservations.validators import check_amount, phone_number
 from restaurant.models import Restaurant
 from users.models import NULLABLE
 
 
 class Table(models.Model):
-
     number = models.SmallIntegerField(
         verbose_name='Номер столика'
     )
@@ -96,4 +98,31 @@ class Reservation(models.Model):
         verbose_name_plural = 'Брони'
 
     def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name} - {self.table}'
+        return f'{self.user} - {self.table}'
+
+
+class HistoryReservations(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь',
+        **NULLABLE
+    )
+    create_at = models.DateTimeField(
+        default=datetime.today(),
+        verbose_name='Время создания'
+    )
+    status = models.CharField(
+        max_length=150,
+        default='Ожидаем вас',
+        verbose_name='статус',
+        **NULLABLE
+    )
+
+    class Meta:
+        verbose_name = 'История резервирования'
+        verbose_name_plural = 'История резервирования'
+        ordering = ['-create_at']
+
+    def __str__(self):
+        return self.status

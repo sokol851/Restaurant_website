@@ -1,11 +1,23 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import (
+    ListView,
+    UpdateView,
+    CreateView,
+    DeleteView
+)
 
-from reservations.forms import ReservationCreateForm, ReservationUpdateForm
+from reservations.forms import (
+    ReservationCreateForm,
+    ReservationUpdateForm
+)
 from reservations.models import Reservation
-from reservations.services import create_product, create_price, create_session, get_status_session
+from reservations.services import (
+    create_product,
+    create_price,
+    create_session
+)
 
 
 class ReservationListView(LoginRequiredMixin, ListView):
@@ -34,7 +46,8 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.request.user == self.object.user or self.request.user.is_superuser:
+        if (self.request.user == self.object.user
+                or self.request.user.is_superuser):
             return self.object
         raise PermissionDenied
 
@@ -65,7 +78,9 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ReservationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ReservationDeleteView(LoginRequiredMixin,
+                            UserPassesTestMixin,
+                            DeleteView):
     model = Reservation
     success_url = reverse_lazy('reservations:list_reservations')
 

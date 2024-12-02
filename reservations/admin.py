@@ -1,11 +1,12 @@
 from django.contrib import admin
 
-from reservations.models import Table, Reservation
+from reservations.models import Table, Reservation, HistoryReservations
 
 
 @admin.register(Table)
 class TableAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "number",
         "restaurant",
         "is_datetime",
@@ -56,4 +57,26 @@ class ReservationAdmin(admin.ModelAdmin):
         "user",
         "phone",
         "create_at",
+    )
+
+
+@admin.register(HistoryReservations)
+class HistoryReservationsAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "create_at",
+        "status",
+    )
+    list_filter = (
+        "id",
+        "create_at",
+        "status",
+    )
+    ordering = (
+        "-create_at",
+    )
+    search_fields = (
+        "id",
+        "create_at",
+        "status",
     )
