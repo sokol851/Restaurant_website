@@ -1,0 +1,266 @@
+[
+  {
+    "model": "restaurant.restaurant",
+    "pk": 1,
+    "fields": {
+      "name": "Питерский",
+      "city": "СПб",
+      "tables_count": 9,
+      "scheme_tables": "restaurant/tables.webp"
+    }
+  },
+  {
+    "model": "restaurant.restaurant",
+    "pk": 2,
+    "fields": {
+      "name": "Московский",
+      "city": "МСК",
+      "tables_count": 10,
+      "scheme_tables": "restaurant/tables_3K5nxJq.webp"
+    }
+  },
+  {
+    "model": "restaurant.staffrestaurant",
+    "pk": 1,
+    "fields": {
+      "first_name": "Иван",
+      "last_name": "Иванов",
+      "photo": "staff/Иванов Иван/non_avatar.png",
+      "position": "Шеф-повар",
+      "date_employment": "2021-02-11",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.staffrestaurant",
+    "pk": 2,
+    "fields": {
+      "first_name": "Олег",
+      "last_name": "Олегов",
+      "photo": "staff/Олегов Олег/non_avatar.webp",
+      "position": "Официант",
+      "date_employment": "2024-04-06",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.staffrestaurant",
+    "pk": 3,
+    "fields": {
+      "first_name": "Игорь",
+      "last_name": "Игорев",
+      "photo": "staff/Игорев Игорь/admin.jpg",
+      "position": "Владелец ресторана",
+      "date_employment": "1994-11-26",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.missionsrestaurant",
+    "pk": 2,
+    "fields": {
+      "mission": "E",
+      "description": "Еда в нашем ресторане превосходит ожидания!",
+      "serial_number": 2
+    }
+  },
+  {
+    "model": "restaurant.missionsrestaurant",
+    "pk": 3,
+    "fields": {
+      "mission": "S",
+      "description": "Сервис на высоком уровне!",
+      "serial_number": 1
+    }
+  },
+  {
+    "model": "restaurant.missionsrestaurant",
+    "pk": 4,
+    "fields": {
+      "mission": "R",
+      "description": "Резервирование столиков!",
+      "serial_number": 3
+    }
+  },
+  {
+    "model": "restaurant.missionsrestaurant",
+    "pk": 5,
+    "fields": {
+      "mission": "V",
+      "description": "Виртуозная кухня!",
+      "serial_number": 4
+    }
+  },
+  {
+    "model": "restaurant.missionsrestaurant",
+    "pk": 6,
+    "fields": {
+      "mission": "I",
+      "description": "Интерьер в уютном стиле!",
+      "serial_number": 5
+    }
+  },
+  {
+    "model": "restaurant.missionsrestaurant",
+    "pk": 7,
+    "fields": {
+      "mission": "C",
+      "description": "Забота о клиенте!",
+      "serial_number": 6
+    }
+  },
+  {
+    "model": "restaurant.missionsrestaurant",
+    "pk": 8,
+    "fields": {
+      "mission": "E",
+      "description": "Лучшие мероприятия !",
+      "serial_number": 7
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 1,
+    "fields": {
+      "year": 1994,
+      "activity": "Открыли первый ресторан в России!"
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 2,
+    "fields": {
+      "year": 1999,
+      "activity": "Победили в конурсе лучший ресторан города!"
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 3,
+    "fields": {
+      "year": 2002,
+      "activity": "Провели ребрендинг!"
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 4,
+    "fields": {
+      "year": 2005,
+      "activity": "Открыли 5-й ресторан в городе!"
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 5,
+    "fields": {
+      "year": 2000,
+      "activity": "Начали расширение сети ресторанов!"
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 6,
+    "fields": {
+      "year": 2010,
+      "activity": "Начали доставлять еду на дом!"
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 7,
+    "fields": {
+      "year": 2015,
+      "activity": "В ресторанах сети появилась открытая кухня!"
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 8,
+    "fields": {
+      "year": 2022,
+      "activity": "Открыты проведения закрытых мероприятий."
+    }
+  },
+  {
+    "model": "restaurant.historyrestaurant",
+    "pk": 9,
+    "fields": {
+      "year": 2024,
+      "activity": "Продолжаем радовать вас!"
+    }
+  },
+  {
+    "model": "restaurant.description",
+    "pk": 1,
+    "fields": {
+      "description": "Теплый семейный ужин, долгожданная встреча с друзьями, веселый корпоратив в кругу колле или\r\n шумное юбилейное гулянье – в нашем ресторане Вы сможете провести незабываемый праздник.\r\nМы создадим подходящую атмосферу и позаботимся о том, чтобы Вам и Вашим гостям было уютно и весело у нас!",
+      "background": "bg/about.jpg",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.services",
+    "pk": 1,
+    "fields": {
+      "service": "Вкусную еду и тёплый приём в уютном заведении!",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.services",
+    "pk": 2,
+    "fields": {
+      "service": "Бронирование столиков для хорошего вечера!",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.services",
+    "pk": 3,
+    "fields": {
+      "service": "Проведение разного рода мероприятий!",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.services",
+    "pk": 4,
+    "fields": {
+      "service": "Развлекательные программы для всех!",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.services",
+    "pk": 5,
+    "fields": {
+      "service": "Приятные цены!",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.contacts",
+    "pk": 1,
+    "fields": {
+      "city": "Санкт-Петербург",
+      "street": "Невский проспект",
+      "house_number": "10",
+      "extra": "(Вход через арку)",
+      "phone": "+7 (987) 654-32",
+      "is_published": true
+    }
+  },
+  {
+    "model": "restaurant.contacts",
+    "pk": 2,
+    "fields": {
+      "city": "Москва",
+      "street": "Улица Ленина",
+      "house_number": "50",
+      "extra": null,
+      "phone": "+7 (987) 654-32",
+      "is_published": true
+    }
+  }
+]
