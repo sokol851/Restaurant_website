@@ -15,9 +15,11 @@ class Command(BaseCommand):
         reservation = Reservation.objects.all()
         for i in reservation:
             payment = get_status_session(i.session_id)
+
             # Если сессия оплачена - подтверждаем бронь.
             if payment.payment_status == 'paid':
                 if not i.is_confirmed:
+
                     # Создаём запись в историю об этом.
                     HistoryReservations.objects.create(
                         status=f'Бронь ({i.table}) подтверждена!',

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from django.core.management import BaseCommand
+from django.utils import timezone
 
 from reservations.models import Table
 from restaurant.models import Restaurant
@@ -11,19 +12,19 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        year_now = datetime.now().year
-        month_now = datetime.now().month
-        day_now = datetime.now().day
+        year_now = timezone.localtime(timezone.now()).year
+        month_now = timezone.localtime(timezone.now()).month
+        day_now = timezone.localtime(timezone.now()).day
 
         # Время столов
         datetime_objs = [
-            datetime(year_now, month_now, day_now, hour=10),
-            datetime(year_now, month_now, day_now, hour=12),
-            datetime(year_now, month_now, day_now, hour=14),
-            datetime(year_now, month_now, day_now, hour=16),
-            datetime(year_now, month_now, day_now, hour=18),
-            datetime(year_now, month_now, day_now, hour=20),
-            datetime(year_now, month_now, day_now, hour=22),
+            timezone.make_aware(datetime(year_now, month_now, day_now, hour=10)),
+            timezone.make_aware(datetime(year_now, month_now, day_now, hour=12)),
+            timezone.make_aware(datetime(year_now, month_now, day_now, hour=14)),
+            timezone.make_aware(datetime(year_now, month_now, day_now, hour=16)),
+            timezone.make_aware(datetime(year_now, month_now, day_now, hour=18)),
+            timezone.make_aware(datetime(year_now, month_now, day_now, hour=20)),
+            timezone.make_aware(datetime(year_now, month_now, day_now, hour=22)),
         ]
 
         # Получаем рестораны
