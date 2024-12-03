@@ -3,61 +3,66 @@
 {% block content %}
 <form class="row mt-3 mb-5" method="post" enctype="multipart/form-data">
     <div class="container">
-    <div class="bg-image card rounded-5 mx-0"
-         style="background-image: url('{% static 'img/block.png' %}'); background-size: cover; width: 100%;">
-        <div class="mt-3 mx-3 card-header text-white bg-black opacity-75 rounded-5">
-            <h3 class="card-title text-center">
-                Профиль
-            </h3>
-        </div>
-
-        <div class="container mb-3 mt-3 text-white">
-            <div class="row">
-                <div class="col-md-6 col-xs-1 mb-1 text-center">
-                    <img width="300" height="300" src={{object.avatar.url}}>
-                </div>
-                <div class="col-md-6 col-sx-1 bg-black opacity-75 rounded-5">
-                    <table class="table table-dark mt-3 table-bordered">
-                        <tr>
-                            <th>Email:</th>
-                            <td>{{object.email}}</td>
-                        </tr>
-                        <tr>
-                            <th>Имя:</th>
-                            <td colspan="2">{{object.first_name}}</td>
-                        </tr>
-                        <tr>
-                            <th>Фамилия:</th>
-                            <td>{{object.last_name}}</td>
-                        </tr>
-                    </table>
-                    <div class="row">
-                        <div class="col-12">
-                            {% include 'reservations/list_reservation__for_profile.html'%}
-                        </div>
-                    </div>
-                </div>
-
+        <div class="bg-image card rounded-5 mx-0"
+             style="background-image: url('{% static 'img/block.png' %}'); background-size: cover; width: 100%;">
+            <div class="mt-3 mx-3 card-header text-white bg-black opacity-75 rounded-5">
+                <h3 class="card-title text-center">
+                    Профиль
+                </h3>
             </div>
 
-            <div class="card-body">
+            <div class="container mb-3 mt-3 text-white">
                 <div class="row">
-                    <div class="col-md-4 col-sx-1">
-                        <a href="{% url 'users:user_update' object.pk %}" type="button"
-                           class="btn btn-dark form-control border-3 border-black">Редактировать профиль</a>
+                    <div class="col-md-6 col-xs-1 mb-1 text-center"
+                         style="display:flex; align-items:center; justify-content: center;">
+                        <img width="300" height="300" src={{object.avatar.url}}>
                     </div>
-                    <div class="col-md-4 col-sx-1">
-                        <a href="/reservations" type="button"
-                           class="btn btn-dark form-control border-3 border-black">Управление текущими бронями</a>
+                    <div class="col-md-6 col-sx-1 bg-black opacity-75 rounded-5">
+                        <table class="table table-dark mt-3 table-bordered">
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{object.email}}</td>
+                            </tr>
+                            <tr>
+                                <th>Имя:</th>
+                                <td colspan="2">{{object.first_name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Фамилия:</th>
+                                <td>{{object.last_name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Телефон:</th>
+                                <td>{{object.phone}}</td>
+                            </tr>
+                        </table>
+                        <div class="row">
+                            <div class="col-12">
+                                {% include 'reservations/list_reservation__for_profile.html'%}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-4 col-sx-1">
-                        <a href="{% url 'users:user_delete' object.pk %}" type="button"
-                           class="btn btn-danger text-black form-control border-3 border-black">Удалить аккаунт</a>
+
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 col-sx-1">
+                            <a href="{% url 'users:user_update' object.pk %}" type="button"
+                               class="btn btn-dark form-control border-3 border-black">Редактировать профиль</a>
+                        </div>
+                        <div class="col-md-4 col-sx-1">
+                            <a href="/reservations" type="button"
+                               class="btn btn-dark form-control border-3 border-black">Управление текущими бронями</a>
+                        </div>
+                        <div class="col-md-4 col-sx-1">
+                            <a href="{% url 'users:user_delete' object.pk %}" type="button"
+                               class="btn btn-danger text-black form-control border-3 border-black">Удалить аккаунт</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-        </div>
 </form>
 {% endblock %}

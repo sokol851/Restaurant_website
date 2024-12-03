@@ -4,6 +4,7 @@ import string
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -83,6 +84,13 @@ class EmailConfirmationSentView(TemplateView):
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = User
 
+    def get_object(self, queryset=None):
+        self.user = super().get_object(queryset)
+        if (self.request.user == self.user
+                or self.request.user.is_superuser):
+            return self.user
+        raise PermissionDenied
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['history_reservations'] = (HistoryReservations.objects.all().
@@ -93,6 +101,13 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     success_url = reverse_lazy("restaurant:index")
+
+    def get_object(self, queryset=None):
+        self.user = super().get_object(queryset)
+        if (self.request.user == self.user
+                or self.request.user.is_superuser):
+            return self.user
+        raise PermissionDenied
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
@@ -114,6 +129,13 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
             user.avatar = 'non_avatar.png'
         user.save()
         return super().form_valid(form)
+
+    def get_object(self, queryset=None):
+        self.user = super().get_object(queryset)
+        if (self.request.user == self.user
+                or self.request.user.is_superuser):
+            return self.user
+        raise PermissionDenied
 
 
 class CustomLoginView(LoginView):
