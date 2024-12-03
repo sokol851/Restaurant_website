@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+from django.utils import timezone
 
 
 class Command(BaseCommand):
@@ -26,7 +27,7 @@ class Command(BaseCommand):
                     HistoryReservations.objects.create(
                         status=f'Бронь ({i.table}) подтверждена!',
                         user=i.user,
-                        create_at=datetime.now()
+                        create_at=timezone.localtime(timezone.now())
                     )
                     i.is_confirmed = True
                     i.save()

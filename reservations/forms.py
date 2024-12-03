@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django import forms
+from django.utils import timezone
 
 from reservations import models
 from reservations.models import Reservation
@@ -25,8 +28,12 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['table'].queryset = (
-            models.Table.objects.all().filter(available=True))
+
+        # за 15 минут до события доступность столиков для регистрации фильтруется.
+        event_time = timezone.localtime(timezone.now()) + timedelta(minutes=15)
+        self.fields['table'].queryset = (models.Table.objects.all().
+                                         filter(available=True).
+                                         filter(is_datetime__gt=event_time))
 
     class Meta:
         model = Reservation

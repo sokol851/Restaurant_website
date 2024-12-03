@@ -167,7 +167,7 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
     'update_reservations': {
         'task': 'reservations.tasks.update_reservations',
-        'schedule': timedelta(seconds=10), }
+        'schedule': timedelta(minutes=1), }
 }
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
