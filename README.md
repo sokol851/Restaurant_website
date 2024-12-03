@@ -169,3 +169,5 @@
 
 ### Профиль пользователя:
 <img src="./static/readme/reservations.png" width="50%">
+
+<hr>
