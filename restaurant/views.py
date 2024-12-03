@@ -10,7 +10,7 @@ from restaurant.models import (
     StaffRestaurant,
     Description,
     Services,
-    Contacts)
+    Restaurant)
 from django.contrib import messages
 
 
@@ -46,7 +46,7 @@ class Index(TemplateView, FormView):
         context = super().get_context_data(**kwargs)
         context['description'] = Description.objects.filter(is_published=True)
         context['services'] = Services.objects.filter(is_published=True)
-        context['contacts'] = Contacts.objects.filter(is_published=True)
+        context['restaurant'] = Restaurant.objects.filter(is_published=True)
         return context
 
 

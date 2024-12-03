@@ -4,9 +4,14 @@
     "pk": 1,
     "fields": {
       "name": "Питерский",
-      "city": "СПб",
       "tables_count": 9,
-      "scheme_tables": "restaurant/tables.webp"
+      "scheme_tables": "restaurant/tables.webp",
+      "city": "Санкт-Петербург",
+      "street": "Невский проспект",
+      "house_number": "10",
+      "extra": "(Вход через арку)",
+      "phone": "+7 (987) 654-32",
+      "is_published": true
     }
   },
   {
@@ -14,9 +19,14 @@
     "pk": 2,
     "fields": {
       "name": "Московский",
-      "city": "МСК",
       "tables_count": 10,
-      "scheme_tables": "restaurant/tables_3K5nxJq.webp"
+      "scheme_tables": "restaurant/tables_3K5nxJq.webp",
+      "city": "Москва",
+      "street": "Улица Ленина",
+      "house_number": "50",
+      "extra": null,
+      "phone": "+7 (987) 654-32",
+      "is_published": true
     }
   },
   {
@@ -236,30 +246,6 @@
     "pk": 5,
     "fields": {
       "service": "Приятные цены!",
-      "is_published": true
-    }
-  },
-  {
-    "model": "restaurant.contacts",
-    "pk": 1,
-    "fields": {
-      "city": "Санкт-Петербург",
-      "street": "Невский проспект",
-      "house_number": "10",
-      "extra": "(Вход через арку)",
-      "phone": "+7 (987) 654-32",
-      "is_published": true
-    }
-  },
-  {
-    "model": "restaurant.contacts",
-    "pk": 2,
-    "fields": {
-      "city": "Москва",
-      "street": "Улица Ленина",
-      "house_number": "50",
-      "extra": null,
-      "phone": "+7 (987) 654-32",
       "is_published": true
     }
   }
