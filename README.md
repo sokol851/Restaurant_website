@@ -1,20 +1,35 @@
 ## Сайт для бронирования столиков в ресторане (DF2)
+Разделы проекта:
 
-### Главная страница
-<img src="./static/img/index.png" width="50%">
+[Скриншоты страниц сайта](#вид-страниц-сайта).
 
-![index](./static/img/index.png)
+[Команды страниц](#команды)
 
-### О ресторане:
-![about](./static/img/about_site.png)
+<hr>
 
-### Профиль пользователя:
-![profile](./static/img/profile.png)
-
-<img src="./static/img/profile.png" width=50% height=50%>
-
+## Команды
 python manage.py csu
 
 python manage.py create_tables
 
 python manage.py update_tables
+
+<hr>
+
+
+
+## Вид страниц сайта:
+### Главная:
+<img src="./static/readme/index.png" width="50%">
+
+### О ресторане:
+<img src="./static/readme/about_site.png" width="50%">
+
+### Профиль пользователя:
+<img src="./static/readme/profile.png" width="50%">
+
+### Профиль пользователя:
+<img src="./static/readme/reservation_list.png" width="50%">
+
+### Профиль пользователя:
+<img src="./static/readme/reservations.png" width="50%">
