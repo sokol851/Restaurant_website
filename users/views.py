@@ -5,17 +5,22 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import (CreateView, DeleteView, DetailView, FormView,
-                                  TemplateView, UpdateView)
-
+from django.views.generic import (CreateView,
+                                  DeleteView,
+                                  DetailView,
+                                  FormView,
+                                  TemplateView,
+                                  UpdateView)
 from config import settings
 from reservations.models import HistoryReservations
-from users.forms import (CustomLoginForm, UserPasswordResetForm,
-                         UserProfileForm, UserRegisterForm)
+from restaurant.tasks import task_send_mail
+from users.forms import (CustomLoginForm,
+                         UserPasswordResetForm,
+                         UserProfileForm,
+                         UserRegisterForm)
 from users.models import User
 
 
@@ -40,17 +45,20 @@ class RegisterView(CreateView):
     def send_verification_email(user):
         verification_link = \
             f"{settings.SITE_URL}/users/verify/{user.token_verify}/"
+
         subject = "Подтвердите регистрацию!"
         message = (
             f"Благодарим за регистрацию на сайте ресторана.\n"
             f"Для активации учётной записи, пожалуйста перейдите по ссылке:\n"
-            f"{verification_link}"
-        )
-        send_mail(
+            f"{verification_link}")
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        task_send_mail.delay(
             subject,
             message,
-            settings.DEFAULT_FROM_EMAIL,
-            [user.email],
+            from_email,
+            recipient_list,
             fail_silently=False,
         )
 
@@ -167,8 +175,10 @@ class UserPasswordResetView(FormView):
 
             subject = "Восстановление пароля"
             message = f"Ваш новый пароль: {new_password}"
-            send_mail(subject, message, settings.EMAIL_HOST_USER,
-                      [user.email])
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+
+            task_send_mail.delay(subject, message, from_email, recipient_list)
         return super().form_valid(form)
 
 
