@@ -46,13 +46,6 @@ class User(AbstractUser):
         **NULLABLE
     )
 
-    country = models.CharField(
-        max_length=50,
-        verbose_name="Страна",
-        **NULLABLE,
-        default="Не указано"
-    )
-
     is_active = models.BooleanField(
         default=False
     )

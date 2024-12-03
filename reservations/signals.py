@@ -13,13 +13,13 @@ from reservations.services import (
     create_price,
     create_session
 )
+from reservations.tasks import create_history, table_available, update_param
 
 
 @receiver(post_save, sender=Reservation)
 def toggle_available(sender, instance, created, **kwargs):
     #  Если ещё не создан
     if created:
-
         # Создаём продукт
         stripe_product = create_product(product=instance)
         # Создаём цену
@@ -34,41 +34,36 @@ def toggle_available(sender, instance, created, **kwargs):
             link=payment_link, )
 
         # Запись в историю о создании брони.
-        HistoryReservations.objects.create(
-            user=instance.user,
-            create_at=timezone.localtime(timezone.now()),
-            status=f'Ожидаем подтверждения брони - '
-                   f'({Table.objects.get(id=instance.table.id)})',
-        )
-        # Делаем стол не доступным
-        Table.objects.filter(id=instance.table.id).update(available=False)
+        create_history.delay(instance.id,
+                             f'Ожидаем подтверждения брони -'
+                             f' {Table.objects.get(id=instance.table.id)})')
 
-    #  Если объект уже создан
+        # Делаем стол не доступным
+        table_available.delay(instance.table.id, False)
+
+    # Если объект уже создан
     if not created:
         # Старый стол стал доступен
-        Table.objects.filter(id=instance.old_table).update(available=True)
+        table_available.delay(instance.old_table, True)
+
         # Новый стол - не доступен
-        Table.objects.filter(id=instance.table.id).update(available=False)
+        table_available.delay(instance.table.id, False)
 
         #  Обновляем значение поля old_table.
-        (Reservation.objects.filter(id=instance.id).
-         update(old_table=instance.table.id))
+        update_param.delay(instance.id, instance.table.id)
 
         #  Запись в историю об изменениях.
         if Table.objects.get(id=instance.old_table) != instance.table:
-            HistoryReservations.objects.create(
-                status=f'Бронь ({Table.objects.get(id=instance.old_table)})'
-                       f' изменена на ({str(instance.table)})',
-                user=instance.user,
-                create_at=timezone.localtime(timezone.now())
-            )
+            create_history.delay(
+                instance.id,
+                f'Бронь ({Table.objects.get(id=instance.old_table)})'
+                f' изменена на ({str(instance.table)})')
 
 
 @receiver(post_delete, sender=Reservation)
-def toggle_available_delete(sender, instance: Reservation, **kwargs):
-
+def toggle_available_delete(sender, instance, **kwargs):
     #  Стол становится доступным
-    Table.objects.filter(id=instance.table.id).update(available=True)
+    table_available.delay(instance.table.id, True)
 
     # Делаем запись в историю
     HistoryReservations.objects.create(
@@ -83,4 +78,12 @@ def toggle_available_delete(sender, instance: Reservation, **kwargs):
             and timezone.localtime(timezone.now()).timestamp() <
             instance.table.is_datetime.timestamp()):
         print('Оформлен возврат депозита на карту')
+
+        # Делаем запись в историю
+        HistoryReservations.objects.create(
+            status=f'Оформлен возврат депозита за бронь -'
+                   f' ({str(instance.table)})!',
+            user=instance.user,
+            create_at=timezone.localtime(timezone.now())
+        )
         # print(stripe.Refund.create(charge=instance.session_id))
