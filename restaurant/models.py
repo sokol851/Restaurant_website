@@ -19,14 +19,46 @@ def upload_for_restaurant(self, filename):
 
 
 class Restaurant(models.Model):
-    name = models.CharField(max_length=150, verbose_name='Название')
-    city = models.CharField(max_length=150, verbose_name='Город')
-    tables_count = models.SmallIntegerField(verbose_name='Количество столов',
-                                            default=10)
-    scheme_tables = models.ImageField(upload_to=upload_for_restaurant,
-                                      **NULLABLE,
-                                      verbose_name='Фото'
-                                      )
+    name = models.CharField(
+        max_length=150,
+        verbose_name='Название'
+    )
+    city = models.CharField(
+        max_length=150,
+        verbose_name='Город'
+    )
+    tables_count = models.SmallIntegerField(
+        verbose_name='Количество столов',
+        default=10
+    )
+    scheme_tables = models.ImageField(
+        upload_to=upload_for_restaurant,
+        **NULLABLE,
+        verbose_name='Фото'
+    )
+
+    street = models.CharField(
+        max_length=50,
+        verbose_name='Улица',**NULLABLE
+    )
+    house_number = models.CharField(
+        max_length=10,
+        verbose_name='Номер дома',**NULLABLE
+    )
+    extra = models.CharField(
+        max_length=100,
+        verbose_name='Дополнительная информация',
+        **NULLABLE
+    )
+    phone = models.CharField(
+        max_length=15,
+        verbose_name='Номер телефона',
+        **NULLABLE
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Признак публикации'
+    )
 
     class Meta:
         verbose_name = 'Ресторан'
@@ -188,39 +220,3 @@ class Services(models.Model):
 
     def __str__(self):
         return self.service
-
-
-class Contacts(models.Model):
-    city = models.CharField(
-        max_length=50,
-        verbose_name='Город'
-    )
-    street = models.CharField(
-        max_length=50,
-        verbose_name='Улица'
-    )
-    house_number = models.CharField(
-        max_length=10,
-        verbose_name='Номер дома'
-    )
-    extra = models.CharField(
-        max_length=100,
-        verbose_name='Дополнительная информация',
-        **NULLABLE
-    )
-    phone = models.CharField(
-        max_length=15,
-        verbose_name='Номер телефона',
-        **NULLABLE
-    )
-    is_published = models.BooleanField(
-        default=True,
-        verbose_name='Признак публикации'
-    )
-
-    class Meta:
-        verbose_name = 'Контакт'
-        verbose_name_plural = 'Контакты'
-
-    def __str__(self):
-        return f"{self.city} ({self.street}) - {self.phone}"

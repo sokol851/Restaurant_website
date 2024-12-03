@@ -29,7 +29,10 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # за 15 минут до события доступность столиков для регистрации фильтруется.
+        self.fields['comment'] = forms.CharField(widget=forms.Textarea(attrs={'rows': '3', 'class':'form-control'}))
+        self.fields['comment'].label = 'Ваше сообщение'
+
+        # за 15 минут до события столик становится недоступен для брони.
         event_time = timezone.localtime(timezone.now()) + timedelta(minutes=15)
         self.fields['table'].queryset = (models.Table.objects.all().
                                          filter(available=True).

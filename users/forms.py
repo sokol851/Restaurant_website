@@ -27,6 +27,7 @@ class UserProfileForm(StyleFormMixin, UserChangeForm):
             "email",
             "first_name",
             "last_name",
+            "phone",
             "avatar",
         )
 

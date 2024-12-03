@@ -40,8 +40,7 @@
                         {% csrf_token %}
                         {{ form.as_p }}
                         <p class="text-center text-black form-control bg-danger">Для подтверждения брони необходимо
-                            внести
-                            депозит.</p>
+                            внести депозит в течение 30 минут.</p>
                         {% if object %}
                         <button type="submit" class="btn btn-success form-control">
                             Сохранить

@@ -5,7 +5,6 @@ from restaurant.models import (HistoryRestaurant,
                                StaffRestaurant,
                                Description,
                                Services,
-                               Contacts,
                                Restaurant)
 
 
@@ -87,20 +86,6 @@ class ServicesAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "is_published",
-    )
-
-
-@admin.register(Contacts)
-class ContactsAdmin(admin.ModelAdmin):
-    list_display = (
-        "city",
-        "street",
-        "phone",
-    )
-    list_filter = (
-        "city",
-        "street",
-        "phone",
     )
 
 
