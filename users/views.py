@@ -25,6 +25,12 @@ from users.models import User
 
 
 class RegisterView(CreateView):
+    """
+        Контроллер создания пользователя
+
+        Методы:
+            send_verification_email - отправка письма для верификации
+    """
     model = User
     form_class = UserRegisterForm
     template_name = "users/register.html"
@@ -43,6 +49,9 @@ class RegisterView(CreateView):
 
     @staticmethod
     def send_verification_email(user):
+        """ Отправка письма для подтверждения регистрации """
+
+        # Собираем письмо
         verification_link = \
             f"{settings.SITE_URL}/users/verify/{user.token_verify}/"
 
@@ -54,6 +63,7 @@ class RegisterView(CreateView):
         from_email = settings.EMAIL_HOST_USER
         recipient_list = [user.email]
 
+        # Отправляем задачу в celery
         task_send_mail.delay(
             subject,
             message,
@@ -64,6 +74,9 @@ class RegisterView(CreateView):
 
 
 class VerifyEmailView(View):
+    """
+    Контроллер верификации почты
+    """
 
     @staticmethod
     def get(request, token_verify, *args, **kwargs):
@@ -86,10 +99,14 @@ class VerifyEmailView(View):
 
 
 class EmailConfirmationSentView(TemplateView):
+    """ Контроллёр уведомления отправки верификации """
     template_name = "users/email_confirmation_sent.html"
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
+    """
+    Контроллер профиля пользователя
+    """
     model = User
 
     def get_object(self, queryset=None):
@@ -107,6 +124,9 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
+    """
+        Контроллер удаления профиля пользователя
+    """
     model = User
     success_url = reverse_lazy("restaurant:index")
 
@@ -119,6 +139,9 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    """
+        Контроллер изменения профиля пользователя
+    """
     model = User
     form_class = UserProfileForm
 
@@ -147,6 +170,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class CustomLoginView(LoginView):
+    """
+        Контроллер формы авторизации
+    """
     form_class = CustomLoginForm
     template_name = "users/login.html"
 
@@ -157,6 +183,9 @@ class CustomLoginView(LoginView):
 
 
 class UserPasswordResetView(FormView):
+    """
+        Контроллёр сброса пароля
+    """
     template_name = "users/user_password_reset.html"
     form_class = UserPasswordResetForm
     success_url = reverse_lazy("users:user_password_sent")
@@ -183,4 +212,7 @@ class UserPasswordResetView(FormView):
 
 
 class UserPasswordSentView(TemplateView):
+    """
+        Контроллёр успешной отправки нового пароля
+    """
     template_name = "users/user_password_sent.html"

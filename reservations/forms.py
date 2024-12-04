@@ -29,6 +29,7 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Меняем размер поля комментария
         self.fields['comment'] = forms.CharField(widget=forms.Textarea(attrs={'rows': '3', 'class':'form-control'}))
         self.fields['comment'].label = 'Ваше сообщение'
 

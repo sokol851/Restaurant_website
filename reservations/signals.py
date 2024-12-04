@@ -17,6 +17,8 @@ from users.models import User
 
 @receiver(post_save, sender=Reservation)
 def toggle_available(sender, instance, created, **kwargs):
+    """ Сигнал для создания или изменения резервирования """
+
     #  Если ещё не создан
     if created:
         # Создаём продукт
@@ -59,7 +61,7 @@ def toggle_available(sender, instance, created, **kwargs):
         table_available.delay(instance.table.id, False)
 
     # Если объект уже создан
-    if not created:
+    else:
         # Старый стол стал доступен
         table_available.delay(instance.old_table, True)
 
@@ -84,10 +86,12 @@ def toggle_available(sender, instance, created, **kwargs):
             old_table_time = (timezone.localtime(old_table.is_datetime).
                               strftime('%d.%m.%Y %H:%M'))
 
-            subject = f'Изменение столика в ресторане "{instance.table.restaurant}"'
+            subject = (f'Изменение столика в ресторане'
+                       f' "{instance.table.restaurant}"')
             body = (f"Добрый день!\n\n"
                     f"Вы изменили бронь в ресторане"
-                    f" '{instance.table.restaurant}', с '{old_table_time}' на время '{is_time}'.\n\n"
+                    f" '{instance.table.restaurant}', с '{old_table_time}'"
+                    f" на время '{is_time}'.\n\n"
                     f"Проверьте изменения в личном кабинете: "
                     f"{settings.SITE_URL}/reservations/")
             from_email = settings.EMAIL_HOST_USER
@@ -99,6 +103,7 @@ def toggle_available(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Reservation)
 def toggle_available_delete(sender, instance, **kwargs):
+    """ Сигнал для удаления резервирования """
     #  Стол становится доступным
     table_available.delay(instance.table.id, True)
 
@@ -127,17 +132,20 @@ def toggle_available_delete(sender, instance, **kwargs):
     task_send_mail.delay(subject, body, from_email, recipient_list)
 
     # Оформляем возврат, если была оплата и время события не наступило.
-    if ((stripe.checkout.Session.retrieve(instance.session_id).
-                 payment_status == "paid")
-            and timezone.localtime(timezone.now()).timestamp() <
-            instance.table.is_datetime.timestamp()):
-        print('Оформлен возврат депозита на карту')
+    if instance.session_id:
+        if ((stripe.checkout.Session.retrieve(instance.session_id).
+                     payment_status == "paid")
+                and timezone.localtime(timezone.now()).timestamp() <
+                instance.table.is_datetime.timestamp()):
 
-        # Делаем запись в историю
-        HistoryReservations.objects.create(
-            status=f'Оформлен возврат депозита за бронь -'
-                   f' ({str(instance.table)})!',
-            user=instance.user,
-            create_at=timezone.localtime(timezone.now())
-        )
-        # print(stripe.Refund.create(charge=instance.session_id))
+            # Делаем запись в историю
+            HistoryReservations.objects.create(
+                status=f'Оформлен возврат депозита за бронь -'
+                       f' ({str(instance.table)})!',
+                user=instance.user,
+                create_at=timezone.localtime(timezone.now())
+            )
+
+            print('Оформлен возврат депозита на карту')
+            # Создаём возврат в Stripe если он был не тестовый.
+            # stripe.Refund.create(charge=instance.session_id)

@@ -24,13 +24,11 @@ class ReservationListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
+        # Пользователь получает доступ только к своим записям
+        # superuser получает доступ ко всем записям
         if not self.request.user.is_superuser:
             queryset = queryset.filter(user=self.request.user.pk)
         return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 
 class ReservationUpdateView(LoginRequiredMixin, UpdateView):
@@ -43,6 +41,8 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
+        # Пользователь получает доступ только к своим записям
+        # superuser получает доступ ко всем записям
         if (self.request.user == self.object.user
                 or self.request.user.is_superuser):
             return self.object
@@ -50,6 +50,7 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # Получаем объекты ресторанов для отображения схем.
         context['scheme_tables'] = Restaurant.objects.all()
         return context
 
@@ -69,6 +70,7 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # Получаем объекты ресторанов для отображения схем.
         context['scheme_tables'] = Restaurant.objects.all()
         return context
 
@@ -81,6 +83,8 @@ class ReservationDeleteView(LoginRequiredMixin,
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
+        # Пользователь получает доступ только к своим записям
+        # superuser получает доступ ко всем записям
         if (self.request.user == self.object.user
                 or self.request.user.is_superuser):
             return self.object

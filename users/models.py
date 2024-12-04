@@ -7,10 +7,25 @@ NULLABLE = {"blank": True, "null": True}
 
 
 def upload_for_users(self, filename):
+    """ Функция для загрузки медиа пользователей по их email """
     return 'users/%s/%s' % (self.email, filename)
 
 
 class User(AbstractUser):
+    """
+    Модель пользователя
+
+    Атрибуты:
+        username (None): ник
+        email (EmailField): почта
+        phone (CharField): телефон
+        first_name (CharField): имя
+        last_name (CharField): фамилия
+        avatar (ImageField): аватар
+        is_active (BooleanField): активация
+        token_verify (UUIDField): токен для регистрации
+    """
+
     username = None
 
     email = models.EmailField(

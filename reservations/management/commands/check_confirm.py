@@ -2,11 +2,10 @@ from django.core.management import BaseCommand
 
 
 class Command(BaseCommand):
-    """
-     Находит неоплаченные брони и удаляет их за 30 минут до начала события.
-    """
-
     def handle(self, *args, **options):
+        """
+        Находит неоплаченные брони и удаляет их за 30 минут до начала события.
+        """
         from django.utils import timezone
         from reservations.models import Reservation, HistoryReservations
 

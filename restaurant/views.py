@@ -24,10 +24,12 @@ class Index(TemplateView, FormView):
     success_url = reverse_lazy('restaurant:index')
 
     def form_valid(self, form):
+        # Получаем данные из формы
         email = form.cleaned_data['email']
         phone = form.cleaned_data['phone']
         message = form.cleaned_data['message']
 
+        # Формируем письмо
         subject = 'Обратная связь для "Ресторан домашней кухни"'
         body = (f"Email: {email}\n"
                 f"Телефон: {phone}\n"
@@ -35,8 +37,10 @@ class Index(TemplateView, FormView):
         from_email = settings.EMAIL_HOST_USER
         recipient_list = [settings.EMAIL_HOST_USER, email]
 
+        # Отправляем задачу отправки письма
         task_send_mail.delay(subject, body, from_email, recipient_list)
 
+        # Появляется отображение успешной отправки
         messages.success(self.request,
                          'Ваше сообщение отправлено!')
 
