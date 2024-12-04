@@ -1,13 +1,13 @@
 import stripe
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 
 from config import settings
-from reservations.models import Reservation, Table, HistoryReservations
-from reservations.services import create_product, create_price, create_session
-from restaurant.tasks import task_send_mail
+from reservations.models import HistoryReservations, Reservation, Table
+from reservations.services import create_price, create_product, create_session
 from reservations.tasks import create_history, table_available, update_param
+from restaurant.tasks import task_send_mail
 from users.models import User
 
 

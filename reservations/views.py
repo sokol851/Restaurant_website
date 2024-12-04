@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from reservations.forms import ReservationCreateForm, ReservationUpdateForm
 from reservations.models import Reservation

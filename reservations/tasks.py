@@ -1,4 +1,5 @@
 from celery import shared_task
+
 from config.celery import app
 
 
@@ -20,9 +21,9 @@ def update_reservations():
 def create_history(id_reservation, status):
     """Задача создания записи в истории"""
 
-    from reservations.models import HistoryReservations
     from django.utils import timezone
-    from reservations.models import Reservation
+
+    from reservations.models import HistoryReservations, Reservation
 
     instance = Reservation.objects.get(id=id_reservation)
     HistoryReservations.objects.create(

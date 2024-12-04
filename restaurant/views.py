@@ -1,18 +1,13 @@
+from django.contrib import messages
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, FormView
-from restaurant.tasks import task_send_mail
+from django.views.generic import FormView, TemplateView
 
 from config import settings
 from restaurant.forms import ContactForm
-from restaurant.models import (
-    HistoryRestaurant,
-    MissionsRestaurant,
-    StaffRestaurant,
-    Description,
-    Services,
-    Restaurant,
-)
-from django.contrib import messages
+from restaurant.models import (Description, HistoryRestaurant,
+                               MissionsRestaurant, Restaurant, Services,
+                               StaffRestaurant)
+from restaurant.tasks import task_send_mail
 
 
 class Index(TemplateView, FormView):

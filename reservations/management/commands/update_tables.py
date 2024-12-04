@@ -8,8 +8,10 @@ class Command(BaseCommand):
         обновляет дату и доступность на следующий день.
         """
         from datetime import timedelta
+
         from django.utils import timezone
-        from reservations.models import Table, Reservation, HistoryReservations
+
+        from reservations.models import HistoryReservations, Reservation, Table
 
         numbers_table = Table.objects.all()
         reservations = Reservation.objects.all()

@@ -1,12 +1,8 @@
 import re
 
 from django import forms
-from django.contrib.auth.forms import (
-    AuthenticationForm,
-    PasswordResetForm,
-    UserChangeForm,
-    UserCreationForm,
-)
+from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
+                                       UserChangeForm, UserCreationForm)
 
 from restaurant.forms import StyleFormMixin
 from users.models import User
