@@ -1,7 +1,8 @@
 {% extends 'restaurant/base.html' %}
 {% load static %}
 {% block content %}
-
+{% load cache %}
+{% cache 60 index %}
 <div class="row">
     <div class="col-12">
         <div class="container text-center mt-3 mb-5">
@@ -71,5 +72,5 @@
         </div>
     </div>
 </div>
-
+{% endcache %}
 {% endblock %}
