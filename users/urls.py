@@ -2,17 +2,11 @@ from django.contrib.auth import views
 from django.urls import path
 
 from users.apps import UsersConfig
-from users.views import (
-    CustomLoginView,
-    EmailConfirmationSentView,
-    ProfileDeleteView,
-    ProfileDetailView,
-    ProfileUpdateView,
-    RegisterView,
-    UserPasswordResetView,
-    UserPasswordSentView,
-    VerifyEmailView,
-)
+from users.views import (CustomLoginView, EmailConfirmationSentView,
+                         ProfileDeleteView, ProfileDetailView,
+                         ProfileUpdateView, RegisterView,
+                         UserPasswordResetView, UserPasswordSentView,
+                         VerifyEmailView)
 
 app_name = UsersConfig.name
 

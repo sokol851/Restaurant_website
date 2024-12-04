@@ -7,7 +7,8 @@ class Command(BaseCommand):
         Находит неоплаченные брони и удаляет их за 30 минут до начала события.
         """
         from django.utils import timezone
-        from reservations.models import Reservation, HistoryReservations
+
+        from reservations.models import HistoryReservations, Reservation
 
         reservations = Reservation.objects.all()
 

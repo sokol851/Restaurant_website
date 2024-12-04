@@ -8,23 +8,14 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    FormView,
-    TemplateView,
-    UpdateView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, FormView,
+                                  TemplateView, UpdateView)
+
 from config import settings
 from reservations.models import HistoryReservations
 from restaurant.tasks import task_send_mail
-from users.forms import (
-    CustomLoginForm,
-    UserPasswordResetForm,
-    UserProfileForm,
-    UserRegisterForm,
-)
+from users.forms import (CustomLoginForm, UserPasswordResetForm,
+                         UserProfileForm, UserRegisterForm)
 from users.models import User
 
 

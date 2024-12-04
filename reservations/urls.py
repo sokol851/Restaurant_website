@@ -1,12 +1,8 @@
-from reservations.apps import ReservationsConfig
 from django.urls import path
 
-from reservations.views import (
-    ReservationListView,
-    ReservationUpdateView,
-    ReservationCreateView,
-    ReservationDeleteView,
-)
+from reservations.apps import ReservationsConfig
+from reservations.views import (ReservationCreateView, ReservationDeleteView,
+                                ReservationListView, ReservationUpdateView)
 
 app_name = ReservationsConfig.name
 

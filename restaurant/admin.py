@@ -1,13 +1,8 @@
 from django.contrib import admin
 
-from restaurant.models import (
-    HistoryRestaurant,
-    MissionsRestaurant,
-    StaffRestaurant,
-    Description,
-    Services,
-    Restaurant,
-)
+from restaurant.models import (Description, HistoryRestaurant,
+                               MissionsRestaurant, Restaurant, Services,
+                               StaffRestaurant)
 
 
 @admin.register(StaffRestaurant)

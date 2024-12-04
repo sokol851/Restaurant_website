@@ -7,10 +7,11 @@ class Command(BaseCommand):
         """
         Проверяет статус оплаты и меняет статус подтверждения брони.
         """
-        from reservations.models import Reservation, HistoryReservations
-        from reservations.services import get_status_session
         import stripe
         from decouple import config
+
+        from reservations.models import HistoryReservations, Reservation
+        from reservations.services import get_status_session
 
         stripe.api_key = config("API_KEY_STRIPE")
 

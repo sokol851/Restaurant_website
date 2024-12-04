@@ -4,8 +4,10 @@ from django.core.management import BaseCommand
 class Command(BaseCommand):
     def handle(self, *args, **options):
         """Создаём доступные столы"""
-        from django.utils import timezone
         from datetime import datetime, timedelta
+
+        from django.utils import timezone
+
         from reservations.models import Table
         from restaurant.models import Restaurant
 

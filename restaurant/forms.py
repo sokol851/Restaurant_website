@@ -1,5 +1,5 @@
-from django.forms import BooleanField
 from django import forms
+from django.forms import BooleanField
 
 
 class StyleFormMixin:
