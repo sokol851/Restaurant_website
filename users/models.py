@@ -7,8 +7,8 @@ NULLABLE = {"blank": True, "null": True}
 
 
 def upload_for_users(self, filename):
-    """ Функция для загрузки медиа пользователей по их email """
-    return 'users/%s/%s' % (self.email, filename)
+    """Функция для загрузки медиа пользователей по их email"""
+    return "users/%s/%s" % (self.email, filename)
 
 
 class User(AbstractUser):
@@ -28,29 +28,18 @@ class User(AbstractUser):
 
     username = None
 
-    email = models.EmailField(
-        unique=True,
-        verbose_name="Почта"
-    )
+    email = models.EmailField(unique=True, verbose_name="Почта")
 
     phone = models.CharField(
-        max_length=35,
-        verbose_name="Телефон",
-        **NULLABLE,
-        default="Не указано"
+        max_length=35, verbose_name="Телефон", **NULLABLE, default="Не указано"
     )
 
     first_name = models.CharField(
-        max_length=150,
-        default="Не указано",
-        verbose_name="Имя",
-        **NULLABLE
+        max_length=150, default="Не указано", verbose_name="Имя", **NULLABLE
     )
 
     last_name = models.CharField(
-        max_length=150,
-        default="Не указано",
-        verbose_name="Фамилия",
+        max_length=150, default="Не указано", verbose_name="Фамилия",
         **NULLABLE
     )
 
@@ -61,14 +50,9 @@ class User(AbstractUser):
         **NULLABLE
     )
 
-    is_active = models.BooleanField(
-        default=False
-    )
+    is_active = models.BooleanField(default=False)
 
-    token_verify = models.UUIDField(
-        default=uuid.uuid4,
-        unique=True
-    )
+    token_verify = models.UUIDField(default=uuid.uuid4, unique=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

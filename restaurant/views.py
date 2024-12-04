@@ -10,7 +10,8 @@ from restaurant.models import (
     StaffRestaurant,
     Description,
     Services,
-    Restaurant)
+    Restaurant,
+)
 from django.contrib import messages
 
 
@@ -21,19 +22,19 @@ class Index(TemplateView, FormView):
 
     template_name = "restaurant/index.html"
     form_class = ContactForm
-    success_url = reverse_lazy('restaurant:index')
+    success_url = reverse_lazy("restaurant:index")
 
     def form_valid(self, form):
         # Получаем данные из формы
-        email = form.cleaned_data['email']
-        phone = form.cleaned_data['phone']
-        message = form.cleaned_data['message']
+        email = form.cleaned_data["email"]
+        phone = form.cleaned_data["phone"]
+        message = form.cleaned_data["message"]
 
         # Формируем письмо
         subject = 'Обратная связь для "Ресторан домашней кухни"'
-        body = (f"Email: {email}\n"
-                f"Телефон: {phone}\n"
-                f"Сообщение:\n{message}")
+        body = f"Email: {email}\n" \
+               f"Телефон: {phone}\n"\
+               f"Сообщение:\n{message}"
         from_email = settings.EMAIL_HOST_USER
         recipient_list = [settings.EMAIL_HOST_USER, email]
 
@@ -41,16 +42,15 @@ class Index(TemplateView, FormView):
         task_send_mail.delay(subject, body, from_email, recipient_list)
 
         # Появляется отображение успешной отправки
-        messages.success(self.request,
-                         'Ваше сообщение отправлено!')
+        messages.success(self.request, "Ваше сообщение отправлено!")
 
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['description'] = Description.objects.filter(is_published=True)
-        context['services'] = Services.objects.filter(is_published=True)
-        context['restaurant'] = Restaurant.objects.filter(is_published=True)
+        context["description"] = Description.objects.filter(is_published=True)
+        context["services"] = Services.objects.filter(is_published=True)
+        context["restaurant"] = Restaurant.objects.filter(is_published=True)
         return context
 
 
@@ -59,13 +59,13 @@ class AboutView(TemplateView):
     Контроллер для страницы о ресторане.
     """
 
-    template_name = 'restaurant/about.html'
+    template_name = "restaurant/about.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['history'] = HistoryRestaurant.objects.order_by('-year')
-        context['missions'] = (
-            MissionsRestaurant.objects.order_by('serial_number'))
-        context['staff'] = StaffRestaurant.objects.filter(is_published=True)
-        context['title'] = 'О ресторане'
+        context["history"] = HistoryRestaurant.objects.order_by("-year")
+        context["missions"] = (MissionsRestaurant.objects.
+                               order_by("serial_number"))
+        context["staff"] = StaffRestaurant.objects.filter(is_published=True)
+        context["title"] = "О ресторане"
         return context

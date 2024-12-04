@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+
 from datetime import timedelta
 from pathlib import Path
 from decouple import config
@@ -25,8 +26,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG") == "True"
 
-ALLOWED_HOSTS = [config("ALLOWED_HOSTS_1"),
-                 config("ALLOWED_HOSTS_2")]
+ALLOWED_HOSTS = [config("ALLOWED_HOSTS_1"), config("ALLOWED_HOSTS_2")]
 
 # Application definition
 
@@ -128,9 +128,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_DIRS = (
-    BASE_DIR / "static",
-)
+STATICFILES_DIRS = (BASE_DIR / "static",)
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -163,12 +161,13 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = config("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")
 CELERY_TIMEZONE = config("CELERY_TIMEZONE")
-CELERY_TASK_TRACK_STARTED = config('CELERY_TASK_TRACK_STARTED') == "True"
+CELERY_TASK_TRACK_STARTED = config("CELERY_TASK_TRACK_STARTED") == "True"
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
-    'update_reservations': {
-        'task': 'reservations.tasks.update_reservations',
-        'schedule': timedelta(minutes=1), }
+    "update_reservations": {
+        "task": "reservations.tasks.update_reservations",
+        "schedule": timedelta(minutes=1),
+    }
 }
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

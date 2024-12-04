@@ -14,16 +14,17 @@ class Command(BaseCommand):
         for reservation in reservations:
             reservation_time = reservation.create_at.timestamp()
             now_time = timezone.localtime(timezone.now()).timestamp()
-            delta = (now_time - reservation_time)
+            delta = now_time - reservation_time
 
             # Если прошло больше 30 минут без оплаты - бронь снимается
             if not reservation.is_confirmed:
                 if delta > 1800:
                     # Создаём запись в историю об этом
                     HistoryReservations.objects.create(
-                        status=f'Оплата брони ({reservation.table})'
-                               f' просрочена!',
+                        status=f"Оплата брони ({reservation.table})"
+                               f" просрочена!",
                         user=reservation.user,
-                        create_at=timezone.localtime(timezone.now()))
+                        create_at=timezone.localtime(timezone.now()),
+                    )
                     # Удаляем
                     reservation.delete()

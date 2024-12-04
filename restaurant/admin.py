@@ -1,11 +1,13 @@
 from django.contrib import admin
 
-from restaurant.models import (HistoryRestaurant,
-                               MissionsRestaurant,
-                               StaffRestaurant,
-                               Description,
-                               Services,
-                               Restaurant)
+from restaurant.models import (
+    HistoryRestaurant,
+    MissionsRestaurant,
+    StaffRestaurant,
+    Description,
+    Services,
+    Restaurant,
+)
 
 
 @admin.register(StaffRestaurant)
@@ -41,12 +43,8 @@ class MissionsAdmin(admin.ModelAdmin):
         "mission",
         "serial_number",
     )
-    search_fields = (
-        "mission",
-    )
-    ordering = (
-        "serial_number",
-    )
+    search_fields = ("mission",)
+    ordering = ("serial_number",)
 
 
 @admin.register(HistoryRestaurant)
@@ -55,16 +53,12 @@ class HistoryAdmin(admin.ModelAdmin):
         "year",
         "activity",
     )
-    list_filter = (
-        "year",
-    )
+    list_filter = ("year",)
     search_fields = (
         "activity",
         "year",
     )
-    ordering = (
-        "-year",
-    )
+    ordering = ("-year",)
 
 
 @admin.register(Description)
@@ -73,9 +67,7 @@ class DescriptionAdmin(admin.ModelAdmin):
         "description",
         "is_published",
     )
-    list_filter = (
-        "is_published",
-    )
+    list_filter = ("is_published",)
 
 
 @admin.register(Services)
@@ -84,9 +76,7 @@ class ServicesAdmin(admin.ModelAdmin):
         "service",
         "is_published",
     )
-    list_filter = (
-        "is_published",
-    )
+    list_filter = ("is_published",)
 
 
 @admin.register(Restaurant)

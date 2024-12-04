@@ -8,29 +8,34 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import (CreateView,
-                                  DeleteView,
-                                  DetailView,
-                                  FormView,
-                                  TemplateView,
-                                  UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    FormView,
+    TemplateView,
+    UpdateView,
+)
 from config import settings
 from reservations.models import HistoryReservations
 from restaurant.tasks import task_send_mail
-from users.forms import (CustomLoginForm,
-                         UserPasswordResetForm,
-                         UserProfileForm,
-                         UserRegisterForm)
+from users.forms import (
+    CustomLoginForm,
+    UserPasswordResetForm,
+    UserProfileForm,
+    UserRegisterForm,
+)
 from users.models import User
 
 
 class RegisterView(CreateView):
     """
-        Контроллер создания пользователя
+    Контроллер создания пользователя
 
-        Методы:
-            send_verification_email - отправка письма для верификации
+    Методы:
+        send_verification_email - отправка письма для верификации
     """
+
     model = User
     form_class = UserRegisterForm
     template_name = "users/register.html"
@@ -49,7 +54,7 @@ class RegisterView(CreateView):
 
     @staticmethod
     def send_verification_email(user):
-        """ Отправка письма для подтверждения регистрации """
+        """Отправка письма для подтверждения регистрации"""
 
         # Собираем письмо
         verification_link = \
@@ -59,7 +64,8 @@ class RegisterView(CreateView):
         message = (
             f"Благодарим за регистрацию на сайте ресторана.\n"
             f"Для активации учётной записи, пожалуйста перейдите по ссылке:\n"
-            f"{verification_link}")
+            f"{verification_link}"
+        )
         from_email = settings.EMAIL_HOST_USER
         recipient_list = [user.email]
 
@@ -89,8 +95,10 @@ class VerifyEmailView(View):
             message = f"Аккаунт {email} успешно активирован!"
         except User.DoesNotExist:
             title = "Ошибка!"
-            message = ("Произошла ошибка."
-                       " Убедитесь, что переходите по ссылке из письма!")
+            message = (
+                "Произошла ошибка."
+                " Убедитесь, что переходите по ссылке из письма!"
+            )
 
         return render(
             request, "users/reg_confirm.html",
@@ -99,7 +107,8 @@ class VerifyEmailView(View):
 
 
 class EmailConfirmationSentView(TemplateView):
-    """ Контроллёр уведомления отправки верификации """
+    """Контроллёр уведомления отправки верификации"""
+
     template_name = "users/email_confirmation_sent.html"
 
 
@@ -107,41 +116,42 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     """
     Контроллер профиля пользователя
     """
+
     model = User
 
     def get_object(self, queryset=None):
         self.user = super().get_object(queryset)
-        if (self.request.user == self.user
-                or self.request.user.is_superuser):
+        if self.request.user == self.user or self.request.user.is_superuser:
             return self.user
         raise PermissionDenied
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['history_reservations'] = (HistoryReservations.objects.all().
+        context["history_reservations"] = (HistoryReservations.objects.all().
                                            filter(user=self.request.user))
         return context
 
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     """
-        Контроллер удаления профиля пользователя
+    Контроллер удаления профиля пользователя
     """
+
     model = User
     success_url = reverse_lazy("restaurant:index")
 
     def get_object(self, queryset=None):
         self.user = super().get_object(queryset)
-        if (self.request.user == self.user
-                or self.request.user.is_superuser):
+        if self.request.user == self.user or self.request.user.is_superuser:
             return self.user
         raise PermissionDenied
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """
-        Контроллер изменения профиля пользователя
+    Контроллер изменения профиля пользователя
     """
+
     model = User
     form_class = UserProfileForm
 
@@ -150,29 +160,29 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         user = form.save()
-        if user.first_name == '' or user.first_name is None:
-            user.first_name = 'Не указано'
-        if user.last_name == '' or user.last_name is None:
-            user.last_name = 'Не указано'
+        if user.first_name == "" or user.first_name is None:
+            user.first_name = "Не указано"
+        if user.last_name == "" or user.last_name is None:
+            user.last_name = "Не указано"
         if user.phone is None:
-            user.phone = 'Не указано'
-        if user.avatar == '':
-            user.avatar = 'non_avatar.png'
+            user.phone = "Не указано"
+        if user.avatar == "":
+            user.avatar = "non_avatar.png"
         user.save()
         return super().form_valid(form)
 
     def get_object(self, queryset=None):
         self.user = super().get_object(queryset)
-        if (self.request.user == self.user
-                or self.request.user.is_superuser):
+        if self.request.user == self.user or self.request.user.is_superuser:
             return self.user
         raise PermissionDenied
 
 
 class CustomLoginView(LoginView):
     """
-        Контроллер формы авторизации
+    Контроллер формы авторизации
     """
+
     form_class = CustomLoginForm
     template_name = "users/login.html"
 
@@ -184,8 +194,9 @@ class CustomLoginView(LoginView):
 
 class UserPasswordResetView(FormView):
     """
-        Контроллёр сброса пароля
+    Контроллёр сброса пароля
     """
+
     template_name = "users/user_password_reset.html"
     form_class = UserPasswordResetForm
     success_url = reverse_lazy("users:user_password_sent")
@@ -196,8 +207,8 @@ class UserPasswordResetView(FormView):
 
         if user is not None:
             characters = string.ascii_letters + string.digits
-            new_password = \
-                "".join(random.choice(characters) for i in range(12))
+            new_password = (
+                "".join(random.choice(characters) for i in range(12)))
 
             user.password = make_password(new_password)
             user.save()
@@ -213,6 +224,7 @@ class UserPasswordResetView(FormView):
 
 class UserPasswordSentView(TemplateView):
     """
-        Контроллёр успешной отправки нового пароля
+    Контроллёр успешной отправки нового пароля
     """
+
     template_name = "users/user_password_sent.html"
