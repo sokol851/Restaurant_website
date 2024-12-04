@@ -8,8 +8,9 @@ class Command(BaseCommand):
         Создаём контент! Включая админа, если не создан.
         """
         from django.core.management import call_command
-        if not User.objects.filter(email='admin@pow.ru'):
-            call_command('csu')
+
+        if not User.objects.filter(email="admin@pow.ru"):
+            call_command("csu")
             print('Создан администратор "admin@pow.ru"')
-        call_command('loaddata', 'fixtures/restaurant.json')
-        print('Создан контент сайта')
+        call_command("loaddata", "fixtures/restaurant.json")
+        print("Создан контент сайта")

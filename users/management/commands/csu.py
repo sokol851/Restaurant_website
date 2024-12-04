@@ -6,8 +6,8 @@ from users.models import User
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        """ Создаём администратора, если не создан """
-        if not User.objects.filter(email='admin@pow.ru'):
+        """Создаём администратора, если не создан"""
+        if not User.objects.filter(email="admin@pow.ru"):
             user = User.objects.create(
                 email="admin@pow.ru",
                 first_name="Admin",
@@ -21,4 +21,4 @@ class Command(BaseCommand):
             user.save()
             print('Создан администратор "admin@pow.ru"')
         else:
-            print('Админ уже существует!')
+            print("Админ уже существует!")

@@ -16,8 +16,10 @@ class Command(BaseCommand):
         for table in numbers_table:
 
             # Если время прошло - перемещаем стол на день вперёд.
-            if (timezone.localtime(timezone.now()).timestamp() >
-                    timezone.localtime(table.is_datetime).timestamp()):
+            if (
+                timezone.localtime(timezone.now()).timestamp()
+                > timezone.localtime(table.is_datetime).timestamp()
+            ):
                 Table.objects.filter(id=table.id).update(
                     is_datetime=table.is_datetime + timedelta(days=1),
                     available=True,
@@ -28,8 +30,8 @@ class Command(BaseCommand):
                     if table == reservation.table:
                         # Создаём запись в историю об этом.
                         HistoryReservations.objects.create(
-                            status=f'Событие ({reservation.table}) завершено!',
+                            status=f"Событие ({reservation.table}) завершено!",
                             user=reservation.user,
-                            create_at=timezone.localtime(timezone.now())
+                            create_at=timezone.localtime(timezone.now()),
                         )
                         reservation.delete()

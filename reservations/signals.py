@@ -4,11 +4,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from config import settings
-from reservations.models import (
-    Reservation,
-    Table,
-    HistoryReservations
-)
+from reservations.models import Reservation, Table, HistoryReservations
 from reservations.services import create_product, create_price, create_session
 from restaurant.tasks import task_send_mail
 from reservations.tasks import create_history, table_available, update_param
@@ -17,7 +13,7 @@ from users.models import User
 
 @receiver(post_save, sender=Reservation)
 def toggle_available(sender, instance, created, **kwargs):
-    """ Сигнал для создания или изменения резервирования """
+    """Сигнал для создания или изменения резервирования"""
 
     #  Если ещё не создан
     if created:
@@ -32,20 +28,24 @@ def toggle_available(sender, instance, created, **kwargs):
         Reservation.objects.filter(id=instance.id).update(
             old_table=instance.table.id,
             session_id=session_id,
-            link=payment_link, )
+            link=payment_link,
+        )
 
         # Готовим уведомление о создании брони для почты
-        is_date_time = (timezone.localtime(instance.table.is_datetime).
-                        strftime('%d.%m.%Y %H:%M'))
+        is_date_time = timezone.localtime(instance.table.is_datetime).strftime(
+            "%d.%m.%Y %H:%M"
+        )
         restaurant = instance.table.restaurant
 
         subject = f'Бронь столика в ресторане "{restaurant}"'
-        body = (f"Добрый день!\n\n"
-                f"Вами зарезервирован столик в ресторане"
-                f" '{restaurant}', время {is_date_time}.\n"
-                f"Во избежание отмены - подтвердите резерв оплатой депозита"
-                f" в течение 30 минут.\n\n"
-                f"Оплата депозита по ссылке: {instance.link}")
+        body = (
+            f"Добрый день!\n\n"
+            f"Вами зарезервирован столик в ресторане"
+            f" '{restaurant}', время {is_date_time}.\n"
+            f"Во избежание отмены - подтвердите резерв оплатой депозита"
+            f" в течение 30 минут.\n\n"
+            f"Оплата депозита по ссылке: {instance.link}"
+        )
         from_email = settings.EMAIL_HOST_USER
         recipient_list = [instance.user.email]
 
@@ -53,9 +53,11 @@ def toggle_available(sender, instance, created, **kwargs):
         task_send_mail.delay(subject, body, from_email, recipient_list)
 
         # Запись в историю о создании брони.
-        create_history.delay(instance.id,
-                             f'Ожидаем подтверждения брони -'
-                             f' {Table.objects.get(id=instance.table.id)})')
+        create_history.delay(
+            instance.id,
+            f"Ожидаем подтверждения брони -"
+            f" {Table.objects.get(id=instance.table.id)})",
+        )
 
         # Делаем стол не доступным
         table_available.delay(instance.table.id, False)
@@ -75,13 +77,15 @@ def toggle_available(sender, instance, created, **kwargs):
         if Table.objects.get(id=instance.old_table) != instance.table:
             create_history.delay(
                 instance.id,
-                f'Бронь ({Table.objects.get(id=instance.old_table)})'
-                f' изменена на ({str(instance.table)})')
+                f"Бронь ({Table.objects.get(id=instance.old_table)})"
+                f" изменена на ({str(instance.table)})",
+            )
 
             # Собираем письмо
             user_email = User.objects.get(id=instance.user.id).email
-            is_time = (timezone.localtime(instance.table.is_datetime).
-                       strftime('%d.%m.%Y %H:%M'))
+            is_time = timezone.localtime(instance.table.is_datetime).strftime(
+                "%d.%m.%Y %H:%M"
+            )
             old_table = Table.objects.get(id=instance.old_table)
             old_table_time = (timezone.localtime(old_table.is_datetime).
                               strftime('%d.%m.%Y %H:%M'))
@@ -103,28 +107,31 @@ def toggle_available(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Reservation)
 def toggle_available_delete(sender, instance, **kwargs):
-    """ Сигнал для удаления резервирования """
+    """Сигнал для удаления резервирования"""
     #  Стол становится доступным
     table_available.delay(instance.table.id, True)
 
     # Делаем запись в историю
     HistoryReservations.objects.create(
-        status=f'Бронь ({str(instance.table)}) удалена!',
+        status=f"Бронь ({str(instance.table)}) удалена!",
         user=instance.user,
-        create_at=timezone.localtime(timezone.now())
+        create_at=timezone.localtime(timezone.now()),
     )
 
     # Готовим уведомление о создании брони для почты
-    is_date_time = (timezone.localtime(instance.table.is_datetime).
-                    strftime('%d.%m.%Y %H:%M'))
+    is_date_time = timezone.localtime(instance.table.is_datetime).strftime(
+        "%d.%m.%Y %H:%M"
+    )
     restaurant = instance.table.restaurant
 
     subject = f'Бронь столика в ресторане "{restaurant} отменена!"'
-    body = (f"Добрый день!\n\n"
-            f"Бронь столика в ресторане"
-            f" '{restaurant}', время {is_date_time} отменена.\n"
-            f"Если вы оплатили бронь, но событие ещё не состоялось -"
-            f" деньги вернутся на вашу карту.")
+    body = (
+        f"Добрый день!\n\n"
+        f"Бронь столика в ресторане"
+        f" '{restaurant}', время {is_date_time} отменена.\n"
+        f"Если вы оплатили бронь, но событие ещё не состоялось -"
+        f" деньги вернутся на вашу карту."
+    )
     from_email = settings.EMAIL_HOST_USER
     recipient_list = [instance.user.email]
 
@@ -133,19 +140,20 @@ def toggle_available_delete(sender, instance, **kwargs):
 
     # Оформляем возврат, если была оплата и время события не наступило.
     if instance.session_id:
-        if ((stripe.checkout.Session.retrieve(instance.session_id).
-                     payment_status == "paid")
-                and timezone.localtime(timezone.now()).timestamp() <
-                instance.table.is_datetime.timestamp()):
-
+        if (
+                stripe.checkout.Session.retrieve(
+                    instance.session_id).payment_status == "paid"
+                and timezone.localtime(timezone.now()).timestamp()
+                < instance.table.is_datetime.timestamp()
+        ):
             # Делаем запись в историю
             HistoryReservations.objects.create(
-                status=f'Оформлен возврат депозита за бронь -'
-                       f' ({str(instance.table)})!',
+                status=f"Оформлен возврат депозита за бронь -"
+                       f" ({str(instance.table)})!",
                 user=instance.user,
-                create_at=timezone.localtime(timezone.now())
+                create_at=timezone.localtime(timezone.now()),
             )
 
-            print('Оформлен возврат депозита на карту')
+            print("Оформлен возврат депозита на карту")
             # Создаём возврат в Stripe если он был не тестовый.
             # stripe.Refund.create(charge=instance.session_id)

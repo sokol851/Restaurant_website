@@ -3,7 +3,7 @@ from django.core.management import BaseCommand
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        """ Создаём доступные столы """
+        """Создаём доступные столы"""
         from django.utils import timezone
         from datetime import datetime, timedelta
         from reservations.models import Table
