@@ -1,6 +1,6 @@
-from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
+from restaurant.tasks import task_send_mail
 
 from config import settings
 from restaurant.forms import ContactForm
@@ -24,19 +24,23 @@ class Index(TemplateView, FormView):
     success_url = reverse_lazy('restaurant:index')
 
     def form_valid(self, form):
+        # Получаем данные из формы
         email = form.cleaned_data['email']
         phone = form.cleaned_data['phone']
         message = form.cleaned_data['message']
 
+        # Формируем письмо
         subject = 'Обратная связь для "Ресторан домашней кухни"'
         body = (f"Email: {email}\n"
                 f"Телефон: {phone}\n"
                 f"Сообщение:\n{message}")
-        from_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = [settings.DEFAULT_FROM_EMAIL]
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [settings.EMAIL_HOST_USER, email]
 
-        send_mail(subject, body, from_email, recipient_list)
+        # Отправляем задачу отправки письма
+        task_send_mail.delay(subject, body, from_email, recipient_list)
 
+        # Появляется отображение успешной отправки
         messages.success(self.request,
                          'Ваше сообщение отправлено!')
 

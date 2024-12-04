@@ -10,6 +10,18 @@ from users.models import NULLABLE
 
 
 class Table(models.Model):
+    """
+        Модель столов ресторана
+
+        Атрибуты:
+            number (SmallIntegerField): номер столика
+            is_datetime (DateTimeField): время
+            restaurant (ForeignKey: Restaurant): ресторан
+            places (CharField): вместимость
+            available (BooleanField): доступность
+
+    """
+
     number = models.SmallIntegerField(
         verbose_name='Номер столика'
     )
@@ -44,6 +56,22 @@ class Table(models.Model):
 
 
 class Reservation(models.Model):
+    """
+    Модель бронирования
+
+    Атрибуты:
+        table (ForeignKey: Table) : стол
+        old_table (IntegerField) : номер предыдущего стола
+        user (ForeignKey: User): пользователь
+        phone (CharField): телефон
+        comment (TextField): комментарий
+        amount (IntegerField): депозит
+        create_at (DateTimeField): время создания
+        is_confirmed (BooleanField): подтверждение брони
+        session_id (CharField): id сессии
+        link (URLField): ссылка на оплату брони
+
+    """
     table = models.ForeignKey(
         Table,
         on_delete=models.CASCADE,
@@ -101,6 +129,15 @@ class Reservation(models.Model):
 
 
 class HistoryReservations(models.Model):
+    """
+    История резервирования
+
+    Атрибуты:
+        user (ForeignKey: User): пользователь
+        create_at (DateTimeField): время создания
+        status (CharField): статус
+
+    """
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

@@ -3,12 +3,12 @@ from django.utils import timezone
 
 
 class Command(BaseCommand):
-    """
-     Проверяет статус оплаты и меняет статус подтверждения брони.
-    """
+
 
     def handle(self, *args, **options):
-        from datetime import datetime
+        """
+        Проверяет статус оплаты и меняет статус подтверждения брони.
+        """
         from reservations.models import Reservation, HistoryReservations
         from reservations.services import get_status_session
         import stripe

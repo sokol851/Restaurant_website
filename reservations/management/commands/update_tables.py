@@ -2,12 +2,11 @@ from django.core.management import BaseCommand
 
 
 class Command(BaseCommand):
-    """
-     Находит просроченные столы и
-     обновляет дату и доступность на следующий день.
-    """
-
     def handle(self, *args, **options):
+        """
+        Находит просроченные столы и
+        обновляет дату и доступность на следующий день.
+        """
         from datetime import timedelta
         from django.utils import timezone
         from reservations.models import Table, Reservation, HistoryReservations
