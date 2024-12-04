@@ -31,7 +31,7 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
 
     model = Reservation
     form_class = ReservationUpdateForm
-    success_url = reverse_lazy("restaurant:index")
+    success_url = reverse_lazy("restaurant:list_reservations")
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
