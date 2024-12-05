@@ -3,14 +3,26 @@ from django.core.exceptions import ValidationError
 
 from reservations.models import Reservation, Table
 from restaurant.forms import StyleFormMixin
-from restaurant.models import Restaurant
 
 
 class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
     """Форма для обновления резервирований"""
+    table_number = forms.ChoiceField(choices=None,
+                                     label="Номер стола",
+                                     initial=None)
+    table_restaurant = forms.ModelChoiceField(queryset=None,
+                                              label="Ресторан",
+                                              empty_label=None)
+    table_is_datetime = forms.ChoiceField(
+        choices=None,
+        label="Дата и время",
+        initial=None
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        from reservations.models import Table
+        from restaurant.models import Restaurant
 
         # Уменьшаем размер поля комментария
         self.fields["comment"] = forms.CharField(
@@ -19,30 +31,14 @@ class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
                 attrs={"rows": "3", "class": "form-control"}))
         self.fields["comment"].label = "Ваше сообщение"
 
-    # Список уникальных номеров столов
-    unique_numbers_values = sorted(set(Table.objects.
-                                       values_list('number', flat=True)))
-
-    table_number = forms.ChoiceField(
-        choices=[(value, value) for value in unique_numbers_values],
-        label="Номер стола",
-        initial=None
-    )
-
-    # Список ресторанов
-    table_restaurant = forms.ModelChoiceField(
-        queryset=Restaurant.objects.all(), label="Ресторан", empty_label=None)
-
-    # Список уникального времени столов
-    unique_is_datetime_values = sorted(set(
-        Table.objects.values_list('is_datetime', flat=True).
-        filter(available=True)))
-
-    table_is_datetime = forms.ChoiceField(
-        choices=[(value, value) for value in unique_is_datetime_values],
-        label="Дата и время",
-        initial=None
-    )
+        self.fields['table_number'].choices = \
+            [(value, value) for value in
+             sorted(set(Table.objects.values_list('number', flat=True)))]
+        self.fields['table_restaurant'].queryset = Restaurant.objects.all()
+        self.fields['table_is_datetime'].choices = \
+            [(value, value) for value in
+             sorted(set(Table.objects.values_list('is_datetime', flat=True).
+                        filter(available=True)))]
 
     def save(self, commit=True):
         # Получаем введённые данные
@@ -105,8 +101,22 @@ class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
 class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
     """Форма для создания резервирований"""
 
+    table_number = forms.ChoiceField(choices=None,
+                                     label="Номер стола",
+                                     initial=None)
+    table_restaurant = forms.ModelChoiceField(queryset=None,
+                                              label="Ресторан",
+                                              empty_label=None)
+    table_is_datetime = forms.ChoiceField(
+        choices=None,
+        label="Дата и время",
+        initial=None
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        from reservations.models import Table
+        from restaurant.models import Restaurant
 
         # Уменьшаем размер поля комментария
         self.fields["comment"] = forms.CharField(
@@ -115,30 +125,14 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
                 attrs={"rows": "3", "class": "form-control"}))
         self.fields["comment"].label = "Ваше сообщение"
 
-    # Список уникальных номеров столов
-    unique_numbers_values = sorted(set(Table.objects.
-                                       values_list('number', flat=True)))
-
-    table_number = forms.ChoiceField(
-        choices=[(value, value) for value in unique_numbers_values],
-        label="Номер стола",
-        initial=None
-    )
-
-    # Список ресторанов
-    table_restaurant = forms.ModelChoiceField(
-        queryset=Restaurant.objects.all(), label="Ресторан", empty_label=None)
-
-    # Список уникального времени столов
-    unique_is_datetime_values = sorted(set(
-        Table.objects.values_list('is_datetime', flat=True).
-        filter(available=True)))
-
-    table_is_datetime = forms.ChoiceField(
-        choices=[(value, value) for value in unique_is_datetime_values],
-        label="Дата и время",
-        initial=None
-    )
+        self.fields['table_number'].choices = \
+            [(value, value) for value in
+             sorted(set(Table.objects.values_list('number', flat=True)))]
+        self.fields['table_restaurant'].queryset = Restaurant.objects.all()
+        self.fields['table_is_datetime'].choices = \
+            [(value, value) for value in
+             sorted(set(Table.objects.values_list('is_datetime', flat=True).
+                        filter(available=True)))]
 
     def save(self, commit=True):
         # Получаем введённые данные
