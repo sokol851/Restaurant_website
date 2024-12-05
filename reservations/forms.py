@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from reservations.models import Reservation, Table
 from restaurant.forms import StyleFormMixin
@@ -7,6 +10,8 @@ from restaurant.forms import StyleFormMixin
 
 class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
     """Форма для обновления резервирований"""
+
+    # Новые поля формы
     table_number = forms.ChoiceField(choices=None,
                                      label="Номер стола",
                                      initial=None)
@@ -21,6 +26,8 @@ class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Импорт моделей после инициализации, избегаем ошибки при миграциях.
         from reservations.models import Table
         from restaurant.models import Restaurant
 
@@ -31,13 +38,21 @@ class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
                 attrs={"rows": "3", "class": "form-control"}))
         self.fields["comment"].label = "Ваше сообщение"
 
+        # за 15 минут до события столик становится недоступен для брони.
+        event_time = timezone.localtime(timezone.now()) + timedelta(minutes=15)
+
+        # Получаем queryset модели столов
+        tables = (Table.objects.all().filter(available=True).
+                  filter(is_datetime__gt=event_time))
+
+        # Присваиваем значения полям формы
         self.fields['table_number'].choices = \
             [(value, value) for value in
-             sorted(set(Table.objects.values_list('number', flat=True)))]
+             sorted(set(tables.values_list('number', flat=True)))]
         self.fields['table_restaurant'].queryset = Restaurant.objects.all()
         self.fields['table_is_datetime'].choices = \
             [(value, value) for value in
-             sorted(set(Table.objects.values_list('is_datetime', flat=True).
+             sorted(set(tables.values_list('is_datetime', flat=True).
                         filter(available=True)))]
 
     def save(self, commit=True):
@@ -115,6 +130,8 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Импорт моделей после инициализации, избегаем ошибки при миграциях.
         from reservations.models import Table
         from restaurant.models import Restaurant
 
@@ -125,13 +142,21 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
                 attrs={"rows": "3", "class": "form-control"}))
         self.fields["comment"].label = "Ваше сообщение"
 
+        # за 15 минут до события столик становится недоступен для брони.
+        event_time = timezone.localtime(timezone.now()) + timedelta(minutes=15)
+
+        # Получаем queryset модели столов
+        tables = (Table.objects.all().filter(available=True).
+                  filter(is_datetime__gt=event_time))
+
+        # Присваиваем значения полям формы
         self.fields['table_number'].choices = \
             [(value, value) for value in
-             sorted(set(Table.objects.values_list('number', flat=True)))]
+             sorted(set(tables.values_list('number', flat=True)))]
         self.fields['table_restaurant'].queryset = Restaurant.objects.all()
         self.fields['table_is_datetime'].choices = \
             [(value, value) for value in
-             sorted(set(Table.objects.values_list('is_datetime', flat=True).
+             sorted(set(tables.values_list('is_datetime', flat=True).
                         filter(available=True)))]
 
     def save(self, commit=True):
