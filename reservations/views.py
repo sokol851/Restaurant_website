@@ -47,14 +47,17 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Получаем объекты ресторанов для отображения схем.
+        # Проверяем включенность кеша
         if CACHE_ENABLED:
-            # Проверяем включенность кеша
-            key = f'scheme_tables'  # Создаем ключ для хранения
-            context["scheme_tables"] = cache.get(key)  # Пытаемся получить данные
+            # Создаём ключ для хранения
+            key = 'scheme_tables'
+            # Пытаемся получить данные
+            context["scheme_tables"] = cache.get(key)
             print('Достаем из кэша')
             if context["scheme_tables"] is None:
                 print('Нет его, присвоили новое значение кэша')
-                # Если данные не были получены из кеша, то выбираем из БД и записываем в кеш
+                # Если данные не были получены из кеша,
+                # то выбираем из БД и записываем в кеш
                 context["scheme_tables"] = Restaurant.objects.all()
                 cache.set(key, context["scheme_tables"])
         else:
@@ -80,16 +83,17 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # Получаем объекты ресторанов для отображения схем.
+        # Проверяем включенность кеша
         if CACHE_ENABLED:
-            # Проверяем включенность кеша
-            key = f'scheme_tables'  # Создаем ключ для хранения
-            context["scheme_tables"] = cache.get(key)  # Пытаемся получить данные
+            # Создаем ключ для хранения
+            key = 'scheme_tables'
+            # Пытаемся получить данные
+            context["scheme_tables"] = cache.get(key)
             print('Достаем из кэша')
             if context["scheme_tables"] is None:
                 print('Нет его, присвоили новое значение кэша')
-                # Если данные не были получены из кеша, то выбираем из БД и записываем в кеш
+                # Если данные не были получены из кеша,
+                # то выбираем из БД и записываем в кеш
                 context["scheme_tables"] = Restaurant.objects.all()
                 cache.set(key, context["scheme_tables"])
         else:

@@ -113,7 +113,8 @@ class StaffRestaurant(models.Model):
             name_day = self.DAYS[2]
         if self.experience.days % 10 in [2, 3, 4]:
             name_day = self.DAYS[0]
-        if self.experience.days % 10 in [0, 5, 6, 7, 8, 9]:
+        if (self.experience.days % 10 in [0, 5, 6, 7, 8, 9] or
+                self.experience.days % 100 in [11, 12, 13, 14]):
             name_day = self.DAYS[1]
         return name_day
 
@@ -125,7 +126,8 @@ class StaffRestaurant(models.Model):
             name_month = self.MONTHS[2]
         if self.experience.months % 10 in [2, 3, 4]:
             name_month = self.MONTHS[0]
-        if self.experience.months % 10 in [0, 5, 6, 7, 8, 9]:
+        if (self.experience.months % 10 in [0, 5, 6, 7, 8, 9] or
+                self.experience.months % 100 in [11, 12]):
             name_month = self.MONTHS[1]
         return name_month
 

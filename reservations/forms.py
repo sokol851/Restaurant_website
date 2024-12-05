@@ -1,9 +1,9 @@
 from django import forms
 from django.core.exceptions import ValidationError
+
 from reservations.models import Reservation, Table
 from restaurant.forms import StyleFormMixin
 from restaurant.models import Restaurant
-from users.models import NULLABLE
 
 
 class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
@@ -13,9 +13,10 @@ class ReservationUpdateForm(StyleFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         # Уменьшаем размер поля комментария
-        self.fields["comment"] = forms.CharField(required=False,
-                                                 widget=forms.Textarea(attrs={"rows": "3", "class": "form-control"})
-                                                 )
+        self.fields["comment"] = forms.CharField(
+            required=False,
+            widget=forms.Textarea(
+                attrs={"rows": "3", "class": "form-control"}))
         self.fields["comment"].label = "Ваше сообщение"
 
     # Список уникальных номеров столов
@@ -108,9 +109,10 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         # Уменьшаем размер поля комментария
-        self.fields["comment"] = forms.CharField(required=False,
-                                                 widget=forms.Textarea(attrs={"rows": "3", "class": "form-control"})
-                                                 )
+        self.fields["comment"] = forms.CharField(
+            required=False,
+            widget=forms.Textarea(
+                attrs={"rows": "3", "class": "form-control"}))
         self.fields["comment"].label = "Ваше сообщение"
 
     # Список уникальных номеров столов
