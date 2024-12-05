@@ -182,3 +182,11 @@ CSRF_TRUSTED_ORIGINS = [
     config("CSRF_TRUSTED_ORIGINS_1"),
     config("CSRF_TRUSTED_ORIGINS_2"),
 ]
+
+CACHE_ENABLED = config('CACHE_ENABLED') == "True"
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': config('CACHE_REDIS_LOCATION')
+    }
+}

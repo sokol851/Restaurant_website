@@ -1,8 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
+from config.settings import CACHE_ENABLED
 from reservations.forms import ReservationCreateForm, ReservationUpdateForm
 from reservations.models import Reservation
 from restaurant.models import Restaurant
@@ -45,7 +47,23 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Получаем объекты ресторанов для отображения схем.
-        context["scheme_tables"] = Restaurant.objects.all()
+        # Проверяем включенность кеша
+        if CACHE_ENABLED:
+            # Создаём ключ для хранения
+            key = 'scheme_tables'
+            # Пытаемся получить данные
+            context["scheme_tables"] = cache.get(key)
+            print('Достаем из кэша')
+            if context["scheme_tables"] is None:
+                print('Нет его, присвоили новое значение кэша')
+                # Если данные не были получены из кеша,
+                # то выбираем из БД и записываем в кеш
+                context["scheme_tables"] = Restaurant.objects.all()
+                cache.set(key, context["scheme_tables"])
+        else:
+            # Если кеш не был подключен, то просто обращаемся к БД
+            print('Выключен кеш')
+            context["scheme_tables"] = Restaurant.objects.all()
         return context
 
 
@@ -65,8 +83,23 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Получаем объекты ресторанов для отображения схем.
-        context["scheme_tables"] = Restaurant.objects.all()
+        # Проверяем включенность кеша
+        if CACHE_ENABLED:
+            # Создаем ключ для хранения
+            key = 'scheme_tables'
+            # Пытаемся получить данные
+            context["scheme_tables"] = cache.get(key)
+            print('Достаем из кэша')
+            if context["scheme_tables"] is None:
+                print('Нет его, присвоили новое значение кэша')
+                # Если данные не были получены из кеша,
+                # то выбираем из БД и записываем в кеш
+                context["scheme_tables"] = Restaurant.objects.all()
+                cache.set(key, context["scheme_tables"])
+        else:
+            # Если кеш не был подключен, то просто обращаемся к БД
+            print('Выключен кеш')
+            context["scheme_tables"] = Restaurant.objects.all()
         return context
 
 

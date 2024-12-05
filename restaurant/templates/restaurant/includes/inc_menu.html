@@ -1,9 +1,12 @@
+{% load cache %}
 {% load static %}
 <nav class="navbar text-center navbar-expand-lg"
      style="background-image: url('{% static 'img/up.png' %}'); background-size: cover;">
     <div class="container">
         <a class="navbar-brand" href="/">
+            {% cache 60 navbar %}
             <img src="{% static 'img/ico.svg' %}" alt="Logo" width="75" height="75">
+            {% endcache %}
             <hr class="border border-danger border-2 opacity-50">
             <p class="fs-4 fst-italic">Ресторан домашней кухни</p>
         </a>

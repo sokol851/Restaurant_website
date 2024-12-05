@@ -1,7 +1,8 @@
 {% extends 'restaurant/base.html' %}
 {% load static %}
 {% block content %}
-
+{% load cache %}
+{% cache 60 about %}
 <div class="col-12 mt-3 mb-5 container-fluid card rounded-5"
      style="background-image: url('{% static 'img/block.png' %}'); background-size: cover;">
 
@@ -82,6 +83,5 @@
 
     </div>
 </div>
-
-
+{% endcache %}
 {% endblock %}
