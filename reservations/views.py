@@ -53,16 +53,13 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
             key = 'scheme_tables'
             # Пытаемся получить данные
             context["scheme_tables"] = cache.get(key)
-            print('Достаем из кэша')
             if context["scheme_tables"] is None:
-                print('Нет его, присвоили новое значение кэша')
                 # Если данные не были получены из кеша,
                 # то выбираем из БД и записываем в кеш
                 context["scheme_tables"] = Restaurant.objects.all()
                 cache.set(key, context["scheme_tables"])
         else:
             # Если кеш не был подключен, то просто обращаемся к БД
-            print('Выключен кеш')
             context["scheme_tables"] = Restaurant.objects.all()
         return context
 
@@ -89,16 +86,13 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
             key = 'scheme_tables'
             # Пытаемся получить данные
             context["scheme_tables"] = cache.get(key)
-            print('Достаем из кэша')
             if context["scheme_tables"] is None:
-                print('Нет его, присвоили новое значение кэша')
                 # Если данные не были получены из кеша,
                 # то выбираем из БД и записываем в кеш
                 context["scheme_tables"] = Restaurant.objects.all()
                 cache.set(key, context["scheme_tables"])
         else:
             # Если кеш не был подключен, то просто обращаемся к БД
-            print('Выключен кеш')
             context["scheme_tables"] = Restaurant.objects.all()
         return context
 
