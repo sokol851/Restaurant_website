@@ -15,18 +15,20 @@ class Command(BaseCommand):
 
         stripe.api_key = config("API_KEY_STRIPE")
 
-        reservation = Reservation.objects.all()
-        for i in reservation:
-            payment = get_status_session(i.session_id)
-
-            # Если сессия оплачена - подтверждаем бронь.
-            if payment.payment_status == "paid":
-                if not i.is_confirmed:
-                    # Создаём запись в историю об этом.
-                    HistoryReservations.objects.create(
-                        status=f"Бронь ({i.table}) подтверждена!",
-                        user=i.user,
-                        create_at=timezone.localtime(timezone.now()),
-                    )
-                    i.is_confirmed = True
-                    i.save()
+        reservations = Reservation.objects.all()
+        for reservation in reservations:
+            # проверяем только не подтверждённые брони
+            if not reservation.is_confirmed:
+                payment = get_status_session(reservation.session_id)
+                # Если сессия оплачена - подтверждаем бронь.
+                if payment.payment_status == "paid":
+                    if not reservation.is_confirmed:
+                        # Создаём запись в историю об этом.
+                        HistoryReservations.objects.create(
+                            status=f"Бронь ({reservation.table}) подтверждена!",
+                            user=reservation.user,
+                            create_at=timezone.localtime(timezone.now()),
+                        )
+                        # Подтверждаем бронь
+                        reservation.is_confirmed = True
+                        reservation.save()
