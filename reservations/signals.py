@@ -64,17 +64,17 @@ def toggle_available(sender, instance, created, **kwargs):
 
     # Если объект уже создан
     else:
-        # Старый стол стал доступен
-        table_available.delay(instance.old_table, True)
-
-        # Новый стол - не доступен
-        table_available.delay(instance.table.id, False)
-
-        #  Обновляем значение поля old_table.
-        update_param.delay(instance.id, instance.table.id)
-
         #  Запись в историю об изменениях.
         if Table.objects.get(id=instance.old_table) != instance.table:
+            # Старый стол стал доступен
+            table_available.delay(instance.old_table, True)
+
+            # Новый стол - не доступен
+            table_available.delay(instance.table.id, False)
+
+            #  Обновляем значение поля old_table.
+            update_param.delay(instance.id, instance.table.id)
+
             create_history.delay(
                 instance.id,
                 f"Бронь ({Table.objects.get(id=instance.old_table)})"
