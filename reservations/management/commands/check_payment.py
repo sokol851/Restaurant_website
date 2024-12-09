@@ -25,7 +25,8 @@ class Command(BaseCommand):
                     if not reservation.is_confirmed:
                         # Создаём запись в историю об этом.
                         HistoryReservations.objects.create(
-                            status=f"Бронь ({reservation.table}) подтверждена!",
+                            status=f"Бронь ({reservation.table})"
+                                   f" подтверждена!",
                             user=reservation.user,
                             create_at=timezone.localtime(timezone.now()),
                         )

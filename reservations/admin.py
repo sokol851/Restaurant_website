@@ -69,12 +69,14 @@ class HistoryReservationsAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "id",
+        "user",
         "create_at",
         "status",
     )
     ordering = ("-create_at",)
     search_fields = (
         "id",
+        "user",
         "create_at",
         "status",
     )
