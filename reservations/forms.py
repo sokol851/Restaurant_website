@@ -199,7 +199,7 @@ class ReservationCreateForm(StyleFormMixin, forms.ModelForm):
             # Если нет - выдаём ошибку
             raise ValidationError(
                 "Столик на выбранное время уже забронирован "
-                "или не существует выбранном ресторане.")
+                "или не существует в выбранном ресторане.")
         return cleaned_data
 
     class Meta:
