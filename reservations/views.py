@@ -98,7 +98,6 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
 
 
 class ReservationDeleteView(LoginRequiredMixin,
-                            UserPassesTestMixin,
                             DeleteView):
     model = Reservation
     success_url = reverse_lazy("reservations:list_reservations")
@@ -111,6 +110,3 @@ class ReservationDeleteView(LoginRequiredMixin,
                 self.request.user.is_superuser):
             return self.object
         raise PermissionDenied
-
-    def test_func(self):
-        return self.request.user.is_superuser
