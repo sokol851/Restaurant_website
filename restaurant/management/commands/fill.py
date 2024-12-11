@@ -12,6 +12,5 @@ class Command(BaseCommand):
 
         if not User.objects.filter(email="admin@pow.ru"):
             call_command("csu")
-            print('Создан администратор "admin@pow.ru"')
         call_command("loaddata", "fixtures/restaurant.json")
         print("Создан контент сайта")
