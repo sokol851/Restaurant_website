@@ -45,7 +45,14 @@ class Command(BaseCommand):
         numbers_table = Table.objects.all()
         for table in numbers_table:
             if datetime.now().timestamp() > table.is_datetime.timestamp():
-                Table.objects.filter(id=table.id).update(
-                    is_datetime=table.is_datetime + timedelta(days=1),
-                    available=True,
-                )
+                # Удаляем стол, если в будущем уже такой стол создан
+                if Table.objects.filter(number=table.number,
+                                        is_datetime=table.is_datetime +
+                                        timedelta(days=1)).exists():
+                    table.delete()
+                # Если стола нет - обновляем дату
+                else:
+                    Table.objects.filter(id=table.id).update(
+                        is_datetime=table.is_datetime + timedelta(days=1),
+                        available=True,
+                    )
