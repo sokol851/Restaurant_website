@@ -48,7 +48,8 @@ class Command(BaseCommand):
                 # Удаляем стол, если в будущем уже такой стол создан
                 if Table.objects.filter(number=table.number,
                                         is_datetime=table.is_datetime +
-                                        timedelta(days=1)).exists():
+                                        timedelta(days=1),
+                                        restaurant=table.restaurant).exists():
                     table.delete()
                 # Если стола нет - обновляем дату
                 else:
