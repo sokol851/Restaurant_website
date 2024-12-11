@@ -44,7 +44,7 @@ def toggle_available(sender, instance, created, **kwargs):
             f" '{restaurant}', время {is_date_time}.\n"
             f"Во избежание отмены - подтвердите резерв оплатой депозита"
             f" в течение 30 минут.\n\n"
-            f"Оплата депозита по ссылке: {instance.link}"
+            f"Оплата депозита по ссылке: {payment_link}"
         )
         from_email = settings.EMAIL_HOST_USER
         recipient_list = [instance.user.email]
