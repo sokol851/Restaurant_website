@@ -1,11 +1,10 @@
 from uuid import uuid4
 
-from django.core import mail
-from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from django.urls import reverse
 
 from reservations.models import HistoryReservations
+
 from .forms import UserProfileForm
 from .models import User, upload_for_users
 from .views import RegisterView
@@ -78,15 +77,19 @@ class UserProfileFormTest(TestCase):
 class UserProfileUpdatesTest(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create(email="test@yandex.com", password="password", is_active=True)
+        self.user = User.objects.create(email="test@yandex.com",
+                                        password="password",
+                                        is_active=True)
 
     def test_profile_update_view_permission(self):
-        response = self.client.get(reverse("users:user_update", kwargs={"pk": self.user.pk}))
+        response = self.client.get(reverse("users:user_update",
+                                           kwargs={"pk": self.user.pk}))
         self.assertEqual(response.status_code, 302)
 
     def test_profile_update_view_get(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse("users:user_update", kwargs={"pk": self.user.pk}))
+        response = self.client.get(reverse("users:user_update",
+                                           kwargs={"pk": self.user.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertTrue("user" in response.context)
 
@@ -96,7 +99,8 @@ class UserProfileUpdatesTest(TestCase):
             "phone": "",
             "avatar": ""
         }
-        response = self.client.post(reverse("users:user_update", kwargs={"pk": self.user.pk}), data)
+        response = self.client.post(reverse("users:user_update",
+                                            kwargs={"pk": self.user.pk}), data)
         updated_user = User.objects.get(pk=self.user.pk)
         self.assertEqual(updated_user.phone, "Не указано")
         self.assertEqual(updated_user.avatar, "non_avatar.png")
@@ -137,7 +141,9 @@ class ProfileDeleteViewTest(TestCase):
 class UserPasswordResetViewTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create(email="test@yandex.com", password="password123", is_active=True)
+        self.user = User.objects.create(email="test@yandex.com",
+                                        password="password123",
+                                        is_active=True)
 
     def test_reset_password(self):
         url = reverse("users:password_reset")
@@ -186,19 +192,23 @@ class VerifyEmailViewTests(TestCase):
         self.user.save()
 
     def test_verify_email_success(self):
-        response = self.client.get(reverse('users:verify_email', args=[self.user.token_verify]))
+        response = self.client.get(reverse('users:verify_email',
+                                           args=[self.user.token_verify]))
 
         self.user.refresh_from_db()
         self.assertTrue(self.user.is_active)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Аккаунт test@yandex.com успешно активирован!")
+        self.assertContains(response,
+                            "Аккаунт test@yandex.com успешно активирован!")
 
     def test_verify_email_invalid_token(self):
         invalid_token = uuid4()
-        response = self.client.get(reverse('users:verify_email', args=[invalid_token]))
+        response = self.client.get(reverse('users:verify_email',
+                                           args=[invalid_token]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response,
-                            "Произошла ошибка. Убедитесь, что переходите по ссылке из письма!")
+                            "Произошла ошибка."
+                            " Убедитесь, что переходите по ссылке из письма!")
 
 
 class ProfileDetailViewTests(TestCase):
@@ -216,18 +226,22 @@ class ProfileDetailViewTests(TestCase):
             is_active=True,
             is_superuser=True
         )
-        HistoryReservations.objects.create(user=self.user, status="Test Reservation 1")
-        HistoryReservations.objects.create(user=self.user, status="Test Reservation 2")
+        HistoryReservations.objects.create(user=self.user,
+                                           status="Test Reservation 1")
+        HistoryReservations.objects.create(user=self.user,
+                                           status="Test Reservation 2")
 
     def test_profile_detail_view_access(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('users:user_detail', kwargs={'pk': self.user.pk}))
+        response = self.client.get(reverse('users:user_detail',
+                                           kwargs={'pk': self.user.pk}))
         self.assertContains(response, self.user.email)
         self.assertContains(response, "Test Reservation 1")
 
     def test_profile_detail_view_access_superuser(self):
         self.client.force_login(self.superuser)
-        response = self.client.get(reverse('users:user_detail', kwargs={'pk': self.user.pk}))
+        response = self.client.get(reverse('users:user_detail',
+                                           kwargs={'pk': self.user.pk}))
         self.assertContains(response, self.user.email)
         self.assertTrue(response, True)
 
@@ -238,7 +252,8 @@ class ProfileDetailViewTests(TestCase):
             is_active=True
         )
         self.client.force_login(another_user)
-        response = self.client.get(reverse('users:user_detail', kwargs={'pk': self.user.pk}))
+        response = self.client.get(reverse('users:user_detail',
+                                           kwargs={'pk': self.user.pk}))
         self.assertEqual(response.status_code, 403)
 
 
@@ -250,12 +265,13 @@ class CustomLoginViewTests(TestCase):
             password='password123',
             is_active=True
         )
+
     def test_login_view_success(self):
         response = self.client.post(reverse('users:login'), {
             'email': 'test@yandex.com',
             'password': 'password123'
         })
-        user = User.objects.get(email='test@yandex.com')
+        User.objects.get(email='test@yandex.com')
         self.assertTrue(response, True)
 
     def test_login_view_invalid_credentials(self):
@@ -266,7 +282,7 @@ class CustomLoginViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_login_view_inactive_user(self):
-        inactive_user = User.objects.create(
+        User.objects.create(
             email='inactive@yandex.com',
             password='password123',
             is_active=False
