@@ -19,21 +19,30 @@ class Command(BaseCommand):
 
             # Если время прошло - перемещаем стол на день вперёд.
             if (
-                timezone.localtime(timezone.now()).timestamp()
-                > timezone.localtime(table.is_datetime).timestamp()
+                    timezone.localtime(timezone.now()).timestamp()
+                    > timezone.localtime(table.is_datetime).timestamp()
             ):
-                Table.objects.filter(id=table.id).update(
-                    is_datetime=table.is_datetime + timedelta(days=1),
-                    available=True,
-                )
+                # Удаляем стол, если в будущем уже такой стол создан
+                if Table.objects.filter(
+                        is_datetime=table.is_datetime +
+                        timedelta(days=1)).exists():
+                    table.delete()
+                # Если стола нет - обновляем дату
+                else:
+                    Table.objects.filter(id=table.id).update(
+                        is_datetime=table.is_datetime + timedelta(days=1),
+                        available=True,
+                    )
 
-                # Проверяем существующие резервы и завершаем просроченные.
-                for reservation in reservations:
-                    if table == reservation.table:
-                        # Создаём запись в историю об этом.
-                        HistoryReservations.objects.create(
-                            status=f"Событие ({reservation.table}) завершено!",
-                            user=reservation.user,
-                            create_at=timezone.localtime(timezone.now()),
-                        )
-                        reservation.delete()
+                    # Проверяем существующие резервы и завершаем просроченные.
+                    for reservation in reservations:
+                        if table == reservation.table:
+                            # Создаём запись в историю об этом.
+                            HistoryReservations.objects.create(
+                                status=f"Событие "
+                                       f"({reservation.table}) "
+                                       f"завершено!",
+                                user=reservation.user,
+                                create_at=timezone.localtime(timezone.now()),
+                            )
+                            reservation.delete()
